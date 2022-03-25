@@ -1,0 +1,50 @@
+﻿<controls:Page xmlns="https://github.com/avaloniaui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
+               xmlns:setting="clr-namespace:VRChatCreatorTools.UI.Pages.Setting"
+               xmlns:model="clr-namespace:VRChatCreatorTools.UI.Model"
+               mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+               x:DataType="setting:SettingViewModel"
+               x:Class="VRChatCreatorTools.UI.Pages.Setting.SettingPage">
+    <controls:Page.DataContext>
+        <setting:SettingViewModel />
+    </controls:Page.DataContext>
+    <ScrollViewer>
+        <StackPanel Orientation="Vertical" Margin="16">
+            <TextBlock Text="Unity Editors" Classes="SubtitleTextBlockStyle" />
+            <Control Height="8" />
+            <TextBlock TextWrapping="Wrap"
+                       Text="This dropdown lists all Unity Editors found on your system which can make new VRChat projects." />
+            <TextBlock TextWrapping="Wrap" Text="Choose the one you prefer to use" />
+            <Control Height="8" />
+            <ComboBox MinWidth="400" 
+                      Items="{CompiledBinding UnityList^}" 
+                      SelectedItem="{CompiledBinding SelectedUnity^}"
+                      SelectionChanged="UnityEditorList_OnSelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="model:UiUnityEditorModel">
+                        <TextBlock Text="{CompiledBinding Path}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Control Height="16" />
+            <TextBlock Text="About" Classes="SubtitleTextBlockStyle" />
+            <Control Height="8" />
+            <TextBlock Text="VRChat Creator Tools" />
+            <TextBlock Text="© 2022 Tlaster" />
+            <Control Height="8" />
+            <TextBlock Text="Contact" />
+            <Control Height="8" />
+            <StackPanel Orientation="Horizontal">
+                <Button Tag="https://github.com/Tlaster/VRCTools" Content="Github" Click="ContactButton_Clicked" />
+                <Control Width="8" />
+                <Button Tag="https://twitter.com/MTlaster" Content="Twitter" Click="ContactButton_Clicked" />
+                <Control Width="8" />
+                <Button Tag="https://vrchat.com/home/user/usr_bd6b6ab7-1f64-44f4-a116-c48098361b9e" Content="VRChat"
+                        Click="ContactButton_Clicked" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</controls:Page>
