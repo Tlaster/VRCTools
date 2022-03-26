@@ -1,0 +1,24 @@
+<controls:Page xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
+             xmlns:projects="clr-namespace:VRChatCreatorTools.UI.Pages.Projects"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="projects:ProjectsViewModel"
+             x:Class="VRChatCreatorTools.UI.Pages.Projects.ProjectsPage">
+    <controls:Page.DataContext>
+        <projects:ProjectsViewModel/>
+    </controls:Page.DataContext>
+    <Grid RowDefinitions="Auto, 16, *" Margin="16">
+        <StackPanel Orientation="Horizontal">
+            <Button Content="New Project" Click="NewProjectClicked"/>
+            <Control Width="8"/>
+            <Button Content="Open"/>
+            <Control Width="8"/>
+            <TextBox Width="300" NewLine=""/>
+        </StackPanel>
+        <Rectangle Grid.Row="1" Height="1" HorizontalAlignment="Stretch" Fill="{DynamicResource AppBarSeparatorForeground}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="2" Text="Projects!"/>
+    </Grid>
+</controls:Page>

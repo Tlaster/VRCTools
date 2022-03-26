@@ -3,7 +3,7 @@ using Realms;
 
 namespace VRChatCreatorTools.Data.Model;
 
-public class ProjectModel : RealmObject
+public class DbProjectModel : RealmObject
 {
     [PrimaryKey] public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
     [Required] public string Name { get; set; } = string.Empty;

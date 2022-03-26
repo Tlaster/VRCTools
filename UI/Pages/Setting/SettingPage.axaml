@@ -33,9 +33,6 @@
             <TextBlock Text="About" Classes="SubtitleTextBlockStyle" />
             <Control Height="8" />
             <TextBlock Text="VRChat Creator Tools" />
-            <TextBlock Text="© 2022 Tlaster" />
-            <Control Height="8" />
-            <TextBlock Text="Contact" />
             <Control Height="8" />
             <StackPanel Orientation="Horizontal">
                 <Button Tag="https://github.com/Tlaster/VRCTools" Content="Github" Click="ContactButton_Clicked" />

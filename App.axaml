@@ -7,6 +7,10 @@
             UseSystemThemeOnWindows="True"
             UseSystemFontOnWindows="True"
             UseUserAccentColorOnWindows="True" />
+        
+        <Style Selector="TextBox">
+            <Setter Property="FontFamily" Value="Microsoft YaHei,Simsun,苹方-简,宋体-简" />
+        </Style>
         <!-- <FluentTheme Mode="Light"/> -->
     </Application.Styles>
 </Application>

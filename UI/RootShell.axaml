@@ -6,6 +6,9 @@
     xmlns:ui="using:FluentAvalonia.UI.Controls"
     xmlns:uip="using:FluentAvalonia.UI.Controls.Primitives"
     xmlns:setting="clr-namespace:VRChatCreatorTools.UI.Pages.Setting"
+    xmlns:packages="clr-namespace:VRChatCreatorTools.UI.Pages.Packages"
+    xmlns:projects="clr-namespace:VRChatCreatorTools.UI.Pages.Projects"
+    xmlns:profile="clr-namespace:VRChatCreatorTools.UI.Pages.Profile"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="VRChatCreatorTools.UI.RootShell">
     <UserControl.Styles>
@@ -107,19 +110,20 @@
         PaneDisplayMode="Left"
         IsPaneOpen="True"
         Classes="RootNav"
+        SelectedItem="{Binding #HomeNavItem}"
         Name="RootNav">
         <ui:NavigationView.MenuItems>
-            <ui:NavigationViewItem Classes="RootNav" Content="Projects">
+            <ui:NavigationViewItem Name="HomeNavItem" Classes="RootNav" Content="Projects" Tag="{x:Type projects:ProjectsPage}">
                 <ui:NavigationViewItem.Icon>
                     <ui:SymbolIcon Symbol="Folder" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
-            <ui:NavigationViewItem Classes="RootNav" Content="Packages">
+            <ui:NavigationViewItem Classes="RootNav" Content="Packages" Tag="{x:Type packages:PackagesPage}">
                 <ui:NavigationViewItem.Icon>
                     <ui:SymbolIcon Symbol="Library" />
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
-            <ui:NavigationViewItem Classes="RootNav" Content="Profile">
+            <ui:NavigationViewItem Classes="RootNav" Content="Profile" Tag="{x:Type profile:ProfilePage}">
                 <ui:NavigationViewItem.Icon>
                     <ui:SymbolIcon Symbol="Contact" />
                 </ui:NavigationViewItem.Icon>
@@ -132,6 +136,6 @@
                 </ui:NavigationViewItem.Icon>
             </ui:NavigationViewItem>
         </ui:NavigationView.FooterMenuItems>
-        <ui:Frame Name="NavFrame" SourcePageType="{Binding #RootNav.SelectedItem.Tag}" />
+        <ui:Frame Name="NavFrame" SourcePageType="{Binding #RootNav.SelectedItem.Tag}"  />
     </ui:NavigationView>
 </UserControl>

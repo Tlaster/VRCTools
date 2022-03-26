@@ -1,0 +1,38 @@
+<controls:Page xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
+             xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="VRChatCreatorTools.UI.Pages.NewProject.NewProjectPage">
+    <Grid RowDefinitions="Auto, 16, *" Margin="16">
+        <StackPanel Orientation="Horizontal">
+            <Button Click="BackClicked">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <controls1:SymbolIcon Symbol="Back"/>
+                    <Control Width="4"/>
+                    <TextBlock Text="Back"/>
+                </StackPanel>
+            </Button>
+            <Control Width="8"/>
+            <controls1:CommandBarSeparator/>
+            <Control Width="8"/>
+            <TextBlock Text="New Project" VerticalAlignment="Center"/>
+        </StackPanel>
+        <Rectangle Grid.Row="1" Height="1" HorizontalAlignment="Stretch" Fill="{DynamicResource AppBarSeparatorForeground}" VerticalAlignment="Center"/>
+        <Grid Grid.Row="2" ColumnDefinitions="*, 8, 3*">
+            <ListBox>
+                <ListBoxItem>Base</ListBoxItem>
+                <ListBoxItem>World</ListBoxItem>
+                <ListBoxItem>Avatar</ListBoxItem>
+                <ListBoxItem>UdonSharp</ListBoxItem>
+            </ListBox>
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="Name"/>
+                <Control Height="8"/>
+                <TextBox HorizontalAlignment="Stretch"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</controls:Page>

@@ -61,12 +61,18 @@ public class SettingRepository
 
     public void SetSelectedUnity(UiUnityEditorModel item)
     {
+        AddOrUpdate(model => model.SelectedUnityPath = item.Path);
+    }
+
+    private void AddOrUpdate(Action<DbSettingModel> action)
+    {
         _realm.Write(() =>
         {
-            foreach (var setting in _realm.All<DbSettingModel>())
+            if (!_realm.All<DbSettingModel>().Any())
             {
-                setting.SelectedUnityPath = item.Path;
+                _realm.Add(new DbSettingModel());
             }
+            action(_realm.All<DbSettingModel>().First());
         });
     }
 

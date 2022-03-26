@@ -38,10 +38,13 @@ public class App : Application
                 {
                     Content = new RootShell(),
                     Title = "VRChat Creator Tools",
-                    TransparencyLevelHint = WindowTransparencyLevel.Mica,
-                    Background = null,
+                    // TransparencyLevelHint = WindowTransparencyLevel.Mica,
+                    // Background = null,
                     ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.PreferSystemChrome,
-                    ExtendClientAreaToDecorationsHint = true
+                    ExtendClientAreaToDecorationsHint = true,
+                    Width = 1024,
+                    Height = 576,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 };
                 break;
             case ISingleViewApplicationLifetime singleViewApplicationLifetime:
