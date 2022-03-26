@@ -20,8 +20,8 @@
             <TextBlock TextWrapping="Wrap" Text="Choose the one you prefer to use" />
             <Control Height="8" />
             <ComboBox MinWidth="400" 
-                      Items="{CompiledBinding UnityList^}" 
                       SelectedItem="{CompiledBinding SelectedUnity^}"
+                      Items="{CompiledBinding UnityList^}" 
                       SelectionChanged="UnityEditorList_OnSelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate x:DataType="model:UiUnityEditorModel">

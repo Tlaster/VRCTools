@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Win32;
+using ReactiveUI;
 using Realms;
 using VRChatCreatorTools.Common.Extension;
 using VRChatCreatorTools.Data.Model;
@@ -16,14 +17,19 @@ namespace VRChatCreatorTools.Repository;
 public class SettingRepository
 {
     private readonly Realm _realm = Ioc.Default.GetService<Realm>()!;
-
+    private readonly IObservable<DbSettingModel> _settingModel;
     public SettingRepository()
     {
-        UnityVersionList = _realm.All<DbUnityEditorModel>().AsObservable()
-            .Select(it => it.Select(UiUnityEditorModel.FromDb).ToImmutableList());
+        _settingModel = _realm.All<DbSettingModel>().AsObservable().Select(it => it.FirstOrDefault() ?? new DbSettingModel());
+        UnityVersionList = _realm.All<DbUnityEditorModel>().AsObservable().Zip(_settingModel)
+            .Select(it =>
+            {
+                var (items, setting) = it;
+                return items.Select(x => new UiUnityEditorModel(x.Path, setting.SelectedUnityPath == x.Path))
+                        .ToImmutableList();
+            });
         InitData();
     }
-
     public IObservable<IReadOnlyCollection<UiUnityEditorModel>> UnityVersionList { get; }
     public IObservable<UiUnityEditorModel?> SelectedUnity =>
         UnityVersionList.Select(x => x.FirstOrDefault(y => y.IsSelected));
@@ -48,7 +54,6 @@ public class SettingRepository
                 _realm.Add(new DbUnityEditorModel
                 {
                     Path = item,
-                    IsSelected = false
                 });
             }
         });
@@ -58,9 +63,9 @@ public class SettingRepository
     {
         _realm.Write(() =>
         {
-            foreach (var unity in _realm.All<DbUnityEditorModel>())
+            foreach (var setting in _realm.All<DbSettingModel>())
             {
-                unity.IsSelected = unity.Path == item.Path;
+                setting.SelectedUnityPath = item.Path;
             }
         });
     }
