@@ -1,8 +1,3 @@
-﻿using VRChatCreatorTools.Data.Model;
+﻿namespace VRChatCreatorTools.UI.Model;
 
-namespace VRChatCreatorTools.UI.Model;
-
-public record UiUnityEditorModel(string Path, bool IsSelected)
-{
-    public static UiUnityEditorModel FromDb(DbUnityEditorModel model, bool isSelected) => new(model.Path, isSelected);
-};
+public record UiUnityEditorModel(string Path, bool IsSelected);

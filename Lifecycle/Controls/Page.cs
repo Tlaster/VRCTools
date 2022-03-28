@@ -9,6 +9,7 @@ namespace VRChatCreatorTools.Lifecycle.Controls;
 
 public class Page : UserControl
 {
+    protected Window Window => this.FindAncestorOfType<Window>();
     protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
     {
         base.OnDetachedFromLogicalTree(e);

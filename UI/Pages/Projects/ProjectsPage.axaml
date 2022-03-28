@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
              xmlns:projects="clr-namespace:VRChatCreatorTools.UI.Pages.Projects"
+             xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="projects:ProjectsViewModel"
              x:Class="VRChatCreatorTools.UI.Pages.Projects.ProjectsPage">
@@ -18,7 +19,7 @@
             <Control Width="8"/>
             <TextBox Width="300" NewLine=""/>
         </StackPanel>
-        <Rectangle Grid.Row="1" Height="1" HorizontalAlignment="Stretch" Fill="{DynamicResource AppBarSeparatorForeground}" VerticalAlignment="Center"/>
+        <controls1:NavigationViewItemSeparator Grid.Row="1" />
         <TextBlock Grid.Row="2" Text="Projects!"/>
     </Grid>
 </controls:Page>

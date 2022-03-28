@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using FluentAvalonia.UI.Controls;
@@ -39,7 +40,7 @@ public class App : Application
                     Content = new RootShell(),
                     Title = "VRChat Creator Tools",
                     // TransparencyLevelHint = WindowTransparencyLevel.Mica,
-                    // Background = null,
+                    // Background = Brushes.Transparent,
                     ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.PreferSystemChrome,
                     ExtendClientAreaToDecorationsHint = true,
                     Width = 1024,

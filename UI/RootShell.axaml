@@ -101,41 +101,45 @@
             <Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentFillColorDefaultBrush}" />
         </Style>
     </UserControl.Styles>
-    <ui:NavigationView
-        IsPaneToggleButtonVisible="False"
-        IsBackEnabled="False"
-        IsBackButtonVisible="False"
-        IsSettingsVisible="False"
-        AlwaysShowHeader="False"
-        PaneDisplayMode="Left"
-        IsPaneOpen="True"
-        Classes="RootNav"
-        SelectedItem="{Binding #HomeNavItem}"
-        Name="RootNav">
-        <ui:NavigationView.MenuItems>
-            <ui:NavigationViewItem Name="HomeNavItem" Classes="RootNav" Content="Projects" Tag="{x:Type projects:ProjectsPage}">
-                <ui:NavigationViewItem.Icon>
-                    <ui:SymbolIcon Symbol="Folder" />
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
-            <ui:NavigationViewItem Classes="RootNav" Content="Packages" Tag="{x:Type packages:PackagesPage}">
-                <ui:NavigationViewItem.Icon>
-                    <ui:SymbolIcon Symbol="Library" />
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
-            <ui:NavigationViewItem Classes="RootNav" Content="Profile" Tag="{x:Type profile:ProfilePage}">
-                <ui:NavigationViewItem.Icon>
-                    <ui:SymbolIcon Symbol="Contact" />
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
-        </ui:NavigationView.MenuItems>
-        <ui:NavigationView.FooterMenuItems>
-            <ui:NavigationViewItem Classes="RootNav" Tag="{x:Type setting:SettingPage}" Content="Settings">
-                <ui:NavigationViewItem.Icon>
-                    <ui:SymbolIcon Symbol="Setting" />
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
-        </ui:NavigationView.FooterMenuItems>
-        <ui:Frame Name="NavFrame" SourcePageType="{Binding #RootNav.SelectedItem.Tag}"  />
-    </ui:NavigationView>
+
+    <Panel>
+        <ui:NavigationView
+            IsPaneToggleButtonVisible="False"
+            IsBackEnabled="False"
+            IsBackButtonVisible="False"
+            IsSettingsVisible="False"
+            AlwaysShowHeader="False"
+            PaneDisplayMode="Left"
+            IsPaneOpen="True"
+            Classes="RootNav"
+            SelectedItem="{Binding #HomeNavItem}"
+            Name="RootNav">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Name="HomeNavItem" Classes="RootNav" Content="Projects"
+                                       Tag="{x:Type projects:ProjectsPage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Folder" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Classes="RootNav" Content="Packages" Tag="{x:Type packages:PackagesPage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Library" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Classes="RootNav" Content="Profile" Tag="{x:Type profile:ProfilePage}">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Contact" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem Classes="RootNav" Tag="{x:Type setting:SettingPage}" Content="Settings">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Setting" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.FooterMenuItems>
+            <ui:Frame Name="NavFrame" SourcePageType="{Binding #RootNav.SelectedItem.Tag}" />
+        </ui:NavigationView>
+    </Panel>
 </UserControl>

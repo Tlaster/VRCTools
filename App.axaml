@@ -4,13 +4,13 @@
              x:Class="VRChatCreatorTools.App">
     <Application.Styles>
         <styling:FluentAvaloniaTheme
+            CustomAccentColor="#FF166ccd"
             UseSystemThemeOnWindows="True"
             UseSystemFontOnWindows="True"
             UseUserAccentColorOnWindows="True" />
         
         <Style Selector="TextBox">
-            <Setter Property="FontFamily" Value="Microsoft YaHei,Simsun,苹方-简,宋体-简" />
+            <Setter Property="FontFamily" Value="Microsoft YaHei,Simsun,苹方-简,宋体-简,Noto Sans CJK SC,Source Han Sans SC" />
         </Style>
-        <!-- <FluentTheme Mode="Light"/> -->
     </Application.Styles>
 </Application>

@@ -5,6 +5,7 @@
                xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
                xmlns:setting="clr-namespace:VRChatCreatorTools.UI.Pages.Setting"
                xmlns:model="clr-namespace:VRChatCreatorTools.UI.Model"
+               xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                x:DataType="setting:SettingViewModel"
                x:Class="VRChatCreatorTools.UI.Pages.Setting.SettingPage">
@@ -13,22 +14,50 @@
     </controls:Page.DataContext>
     <ScrollViewer>
         <StackPanel Orientation="Vertical" Margin="16">
-            <TextBlock Text="Unity Editors" Classes="SubtitleTextBlockStyle" />
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Unity Editors" Classes="SubtitleTextBlockStyle" />
+                <Control Width="8"/>
+                <Button Click="RefreshUnity_OnClicked" Classes="AppBarButton">
+                    <controls1:SymbolIcon Symbol="Refresh"/>
+                </Button>
+            </StackPanel>
             <Control Height="8" />
             <TextBlock TextWrapping="Wrap"
-                       Text="This dropdown lists all Unity Editors found on your system which can make new VRChat projects." />
-            <TextBlock TextWrapping="Wrap" Text="Choose the one you prefer to use" />
-            <Control Height="8" />
-            <ComboBox MinWidth="400" 
-                      SelectedItem="{CompiledBinding SelectedUnity^}"
-                      Items="{CompiledBinding UnityList^}" 
-                      SelectionChanged="UnityEditorList_OnSelectionChanged">
-                <ComboBox.ItemTemplate>
+                       IsVisible="{CompiledBinding !!UnityList^.Count}"
+                       Text="This lists all Unity Editors found on your system which can make new VRChat projects." />
+            <Control Height="8" IsVisible="{CompiledBinding !!UnityList^.Count}" />
+            <TextBlock IsVisible="{CompiledBinding !UnityList^.Count}">No Unity Editor found!</TextBlock>
+            <ItemsRepeater Margin="8, 0" IsVisible="{CompiledBinding !!UnityList^.Count}" Items="{CompiledBinding UnityList^}">
+                <ItemsRepeater.Layout>
+                    <StackLayout Spacing="4"/>
+                </ItemsRepeater.Layout>
+                <ItemsRepeater.ItemTemplate>
                     <DataTemplate x:DataType="model:UiUnityEditorModel">
-                        <TextBlock Text="{CompiledBinding Path}"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center" Text="{CompiledBinding Path}"/>
+                            <Control Width="8"/>
+                            <Button
+                                Classes="AppBarButton"
+                                CommandParameter="{CompiledBinding}" 
+                                Command="{Binding $parent[controls:Page].DataContext.RemoveUnityEditorCommand}">
+                                <controls1:SymbolIcon Symbol="Delete"/>
+                            </Button>
+                        </StackPanel>
                     </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+            <Control Height="8" />
+            <Button Click="AddUnity_OnClicked">
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <controls1:SymbolIcon Symbol="Add"/>
+                    <Control Width="4"/>
+                    <TextBlock Text="Add"/>
+                </StackPanel>
+            </Button>
+            <Control Height="16" />
+            <TextBlock Text="Theme" Classes="SubtitleTextBlockStyle" />
+            <Control Height="8" />
+            <ComboBox Items="{CompiledBinding AllAppTheme}" SelectedItem="{CompiledBinding AppTheme^}" SelectionChanged="AppTheme_OnSelectionChanged"/>
             <Control Height="16" />
             <TextBlock Text="About" Classes="SubtitleTextBlockStyle" />
             <Control Height="8" />

@@ -10,6 +10,7 @@ using ReactiveUI;
 using Realms;
 using VRChatCreatorTools.Common.Extension;
 using VRChatCreatorTools.Data.Model;
+using VRChatCreatorTools.Model;
 using VRChatCreatorTools.UI.Model;
 
 namespace VRChatCreatorTools.Repository;
@@ -21,7 +22,7 @@ public class SettingRepository
     public SettingRepository()
     {
         _settingModel = _realm.All<DbSettingModel>().AsObservable().Select(it => it.FirstOrDefault() ?? new DbSettingModel());
-        UnityVersionList = _realm.All<DbUnityEditorModel>().AsObservable().Zip(_settingModel)
+        UnityVersionList = _realm.All<DbUnityEditorModel>().AsObservable().CombineLatest(_settingModel)
             .Select(it =>
             {
                 var (items, setting) = it;
@@ -30,9 +31,11 @@ public class SettingRepository
             });
         InitData();
     }
+    public IObservable<string> ProjectDirectory => _settingModel.Select(it => it.ProjectDirectory);
+    public IObservable<AppTheme> AppTheme => _settingModel.Select(it => Enum.Parse<AppTheme>(it.Theme));
     public IObservable<IReadOnlyCollection<UiUnityEditorModel>> UnityVersionList { get; }
     public IObservable<UiUnityEditorModel?> SelectedUnity =>
-        UnityVersionList.Select(x => x.FirstOrDefault(y => y.IsSelected));
+        UnityVersionList.Select(x => x.FirstOrDefault(y => y.IsSelected) ?? x.FirstOrDefault());
 
     private void InitData()
     {
@@ -51,6 +54,10 @@ public class SettingRepository
         {
             foreach (var item in items)
             {
+                if (_realm.All<DbUnityEditorModel>().Any(x => x.Path == item))
+                {
+                    continue;
+                }
                 _realm.Add(new DbUnityEditorModel
                 {
                     Path = item,
@@ -58,7 +65,36 @@ public class SettingRepository
             }
         });
     }
-
+    public void AddUnityVersion(string path)
+    {
+        _realm.Write(() =>
+        {
+            if (_realm.All<DbUnityEditorModel>().Any(it => it.Path == path))
+            {
+                return;
+            }
+            _realm.Add(new DbUnityEditorModel
+            {
+                Path = path,
+            });
+        });
+    }
+    public void RemoveUnityVersion(UiUnityEditorModel model)
+    {
+        _realm.Write(() =>
+        {
+            var item = _realm.All<DbUnityEditorModel>().FirstOrDefault(it => it.Path == model.Path);
+            if (item == null)
+            {
+                return;
+            }
+            _realm.Remove(item);
+        });
+    }
+    public void SetAppTheme(AppTheme theme)
+    {
+        AddOrUpdate(model => model.Theme = theme.ToString());
+    }
     public void SetSelectedUnity(UiUnityEditorModel item)
     {
         AddOrUpdate(model => model.SelectedUnityPath = item.Path);
