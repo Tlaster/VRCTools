@@ -28,7 +28,7 @@ public partial class NewProjectPage : Page
         var result = await dialog.ShowAsync(Window);
         if (!string.IsNullOrEmpty(result) && DataContext is NewProjectViewModel viewModel)
         {
-            viewModel.ProjectDirectory = result;
+            viewModel.SetProjectDirectory(result);
         }
     }
     
