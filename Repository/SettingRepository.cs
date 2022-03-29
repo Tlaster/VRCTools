@@ -22,20 +22,24 @@ public class SettingRepository
     public SettingRepository()
     {
         _settingModel = _realm.All<DbSettingModel>().AsObservable().Select(it => it.FirstOrDefault() ?? new DbSettingModel());
-        UnityVersionList = _realm.All<DbUnityEditorModel>().AsObservable().CombineLatest(_settingModel)
-            .Select(it =>
-            {
-                var (items, setting) = it;
-                return items.Select(x => new UiUnityEditorModel(x.Path, setting.SelectedUnityPath == x.Path))
-                        .ToImmutableList();
-            });
+        UnityVersionList = _realm.All<DbUnityEditorModel>().AsObservable().Select(it => it.Select(x => new UiUnityEditorModel(x.Path)).ToImmutableList());
+        SelectedUnity = UnityVersionList.CombineLatest(_settingModel)
+        .Select(it =>
+        {
+            var (list, setting) = it;
+            if (string.IsNullOrEmpty(setting.SelectedUnityPath)) {
+                return list.FirstOrDefault();
+            }
+            return list.FirstOrDefault(x => x.Path == setting.SelectedUnityPath);
+        });
+        ProjectDirectory = _settingModel.Select(it => it.ProjectDirectory);
+        AppTheme = _settingModel.Select(it => Enum.Parse<AppTheme>(it.Theme));
         InitData();
     }
-    public IObservable<string> ProjectDirectory => _settingModel.Select(it => it.ProjectDirectory);
-    public IObservable<AppTheme> AppTheme => _settingModel.Select(it => Enum.Parse<AppTheme>(it.Theme));
+    public IObservable<string> ProjectDirectory { get; }
+    public IObservable<AppTheme> AppTheme { get; }
     public IObservable<IReadOnlyCollection<UiUnityEditorModel>> UnityVersionList { get; }
-    public IObservable<UiUnityEditorModel?> SelectedUnity =>
-        UnityVersionList.Select(x => x.FirstOrDefault(y => y.IsSelected) ?? x.FirstOrDefault());
+    public IObservable<UiUnityEditorModel?> SelectedUnity { get; }
 
     private void InitData()
     {
@@ -64,6 +68,11 @@ public class SettingRepository
                 });
             }
         });
+        // var item = _realm.All<DbUnityEditorModel>().FirstOrDefault();
+        // if (item != null)
+        // {
+        //     AddOrUpdate(it => it.SelectedUnityPath = item.Path);
+        // }
     }
     public void AddUnityVersion(string path)
     {

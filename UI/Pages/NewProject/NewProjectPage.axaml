@@ -67,8 +67,8 @@
                 <ComboBox Grid.Row="2" Grid.Column="1"
                           HorizontalAlignment="Stretch"
                           IsVisible="{CompiledBinding !!UnityEditorList^.Count}" 
-                          Items="{CompiledBinding UnityEditorList^}"
                           SelectedItem="{CompiledBinding SelectedUnityEditor^}"
+                          Items="{CompiledBinding UnityEditorList^}"
                           SelectionChanged="UnityEditorList_OnSelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate DataType="model:UiUnityEditorModel">
