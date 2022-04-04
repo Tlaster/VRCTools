@@ -31,14 +31,4 @@ public partial class NewProjectPage : Page
             viewModel.SetProjectDirectory(result);
         }
     }
-    
-    private void UnityEditorList_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        e.Handled = true;
-        if (e.AddedItems.Count == 1 && e.AddedItems[0] is UiUnityEditorModel item && DataContext is NewProjectViewModel vm)
-        {
-            vm.SetUnityEditorVersion(item);
-        }
-    }
-
 }

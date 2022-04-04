@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -9,6 +10,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using FluentAvalonia.UI.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Realms;
+using VRChatCreatorTools.Common;
 using VRChatCreatorTools.Repository;
 using VRChatCreatorTools.UI;
 
@@ -26,7 +28,9 @@ public class App : Application
     {
         var services = new ServiceCollection();
         services.AddSingleton<SettingRepository>();
-        services.AddSingleton<Realm>(_ => Realm.GetInstance(new InMemoryConfiguration("VRChatCreatorTools")));
+        services.AddSingleton<TemplateRepository>();
+        services.AddSingleton<ProjectRepository>();
+        services.AddSingleton<Realm>(_ => Realm.GetInstance(new RealmConfiguration(Path.Combine(Consts.DocumentDirectory, ".realm"))));
         return services.BuildServiceProvider();
     }
 
@@ -46,6 +50,10 @@ public class App : Application
                     Width = 1024,
                     Height = 576,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                };
+                classicDesktopStyleApplicationLifetime.MainWindow.Closing += (_, _) =>
+                {
+                    Ioc.Default.GetRequiredService<Realm>().Dispose();
                 };
                 break;
             case ISingleViewApplicationLifetime singleViewApplicationLifetime:

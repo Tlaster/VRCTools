@@ -1,78 +1,101 @@
 <controls:Page xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
-             xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-             xmlns:avaloniaSpacedGrid="clr-namespace:AvaloniaSpacedGrid;assembly=AvaloniaSpacedGrid"
-             xmlns:newProject="clr-namespace:VRChatCreatorTools.UI.Pages.NewProject"
-             xmlns:model="clr-namespace:VRChatCreatorTools.UI.Model"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="newProject:NewProjectViewModel"
-             x:Class="VRChatCreatorTools.UI.Pages.NewProject.NewProjectPage">
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
+               xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+               xmlns:avaloniaSpacedGrid="clr-namespace:AvaloniaSpacedGrid;assembly=AvaloniaSpacedGrid"
+               xmlns:newProject="clr-namespace:VRChatCreatorTools.UI.Pages.NewProject"
+               xmlns:model="clr-namespace:VRChatCreatorTools.UI.Model"
+               xmlns:model2="clr-namespace:VRChatCreatorTools.Model"
+               mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+               x:DataType="newProject:NewProjectViewModel"
+               x:Class="VRChatCreatorTools.UI.Pages.NewProject.NewProjectPage">
     <controls:Page.DataContext>
-        <newProject:NewProjectViewModel/>
+        <newProject:NewProjectViewModel />
     </controls:Page.DataContext>
     <Grid RowDefinitions="Auto, 16, *" Margin="16">
         <Grid HorizontalAlignment="Stretch" ColumnDefinitions="Auto, *, Auto">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
                 <Button Click="BackClicked">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <controls1:SymbolIcon Symbol="Back"/>
-                        <Control Width="4"/>
-                        <TextBlock Text="Back"/>
+                        <controls1:SymbolIcon Symbol="Back" />
+                        <Control Width="4" />
+                        <TextBlock Text="Back" />
                     </StackPanel>
                 </Button>
-                <Control Width="8"/>
-                <controls1:CommandBarSeparator/>
-                <Control Width="8"/>
-                <TextBlock Text="New Project" VerticalAlignment="Center"/>
-                <Separator/>
+                <Control Width="8" />
+                <controls1:CommandBarSeparator />
+                <Control Width="8" />
+                <TextBlock Text="New Project" VerticalAlignment="Center" />
+                <Separator />
             </StackPanel>
-            <Button Grid.Column="2" Content="Create" DockPanel.Dock="Right" />
+            <Button Grid.Column="2" Content="Create" DockPanel.Dock="Right" Command="{CompiledBinding CreateCommand}" />
         </Grid>
         <controls1:NavigationViewItemSeparator Grid.Row="1" />
-        <Grid Grid.Row="2" ColumnDefinitions="*, 24, 3*">
-            <ListBox SelectionMode="AlwaysSelected">
-                <ListBoxItem>Base</ListBoxItem>
-                <ListBoxItem>World</ListBoxItem>
-                <ListBoxItem>Avatar</ListBoxItem>
-                <ListBoxItem>UdonSharp</ListBoxItem>
+        <Panel Grid.Row="2" 
+               IsVisible="{CompiledBinding !TemplateList^.Count}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{CompiledBinding Loading}">
+                <ProgressBar IsIndeterminate="True" Width="200" />
+                <Control Height="8"/>
+                <TextBlock Text="Downloading..." HorizontalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{CompiledBinding !Loading}">
+                <TextBlock Text="No Template Founded!" HorizontalAlignment="Center"/>
+                <Control Height="8"/>
+                <Button Command="{CompiledBinding DownloadTemplateCommand}">
+                    <TextBlock Text="Click here to download"/>
+                </Button>
+            </StackPanel>
+        </Panel>
+        <Grid Grid.Row="2" ColumnDefinitions="*, 24, 3*"
+              IsVisible="{CompiledBinding !!TemplateList^.Count}">
+            <ListBox SelectionMode="AlwaysSelected" SelectedItem="{CompiledBinding SelectedTemplate, Mode=TwoWay}" Items="{CompiledBinding TemplateList^}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate DataType="model2:Template">
+                        <TextBlock Text="{CompiledBinding Manifest.DisplayName}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
             <controls1:CommandBarSeparator Grid.Column="1" Margin="8, 0, 0, 0" HorizontalAlignment="Left" />
-            <avaloniaSpacedGrid:SpacedGrid 
+            <avaloniaSpacedGrid:SpacedGrid
                 HorizontalAlignment="Stretch"
                 Grid.Column="2"
-                ColumnDefinitions="Auto, *" 
-                RowDefinitions="Auto, Auto, Auto, *"
+                ColumnDefinitions="Auto, *"
+                RowDefinitions="Auto, Auto, Auto, Auto, Auto, *"
                 ColumnSpacing="8"
                 RowSpacing="8">
                 <avaloniaSpacedGrid:SpacedGrid.Styles>
                     <Style Selector="TextBlock">
-                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
                 </avaloniaSpacedGrid:SpacedGrid.Styles>
-                <TextBlock Text="Name"/>
-                <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" Text="{CompiledBinding ProjectName, Mode=TwoWay}"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="Directory" />
-                <TextBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Text="{CompiledBinding ProjectDirectory, Mode=TwoWay}">
+                <TextBlock Text="Template Name" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{CompiledBinding SelectedTemplate.Manifest.DisplayName, FallbackValue=''}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Template ID" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{CompiledBinding SelectedTemplate.Manifest.Name, FallbackValue=''}" />
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Name" />
+                <TextBox Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch"
+                         Text="{CompiledBinding ProjectName, Mode=TwoWay}" />
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Directory" />
+                <TextBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch"
+                         Text="{CompiledBinding ProjectDirectory, Mode=TwoWay}">
                     <TextBox.InnerRightContent>
                         <Button Classes="AppBarButton" Click="FolderSelect_Clicked">
-                            <controls1:SymbolIcon Symbol="Folder"/>
+                            <controls1:SymbolIcon Symbol="Folder" />
                         </Button>
                     </TextBox.InnerRightContent>
                 </TextBox>
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Unity Editor"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" IsVisible="{CompiledBinding !UnityEditorList^.Count}">No Unity Editor found!</TextBlock>
-                <ComboBox Grid.Row="2" Grid.Column="1"
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Unity Editor" />
+                <TextBlock Grid.Row="4" Grid.Column="1" IsVisible="{CompiledBinding !UnityEditorList^.Count}">No Unity Editor found!</TextBlock>
+                <ComboBox Grid.Row="4" Grid.Column="1"
                           HorizontalAlignment="Stretch"
-                          IsVisible="{CompiledBinding !!UnityEditorList^.Count}" 
-                          SelectedItem="{CompiledBinding SelectedUnityEditor^}"
-                          Items="{CompiledBinding UnityEditorList^}"
-                          SelectionChanged="UnityEditorList_OnSelectionChanged">
+                          IsVisible="{CompiledBinding !!UnityEditorList^.Count}"
+                          SelectedItem="{CompiledBinding SelectedUnityEditor, Mode=TwoWay}"
+                          Items="{CompiledBinding UnityEditorList^}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate DataType="model:UiUnityEditorModel">
-                            <TextBlock Text="{CompiledBinding Path}"/>
+                            <TextBlock Text="{CompiledBinding Path}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>

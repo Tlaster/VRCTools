@@ -17,7 +17,7 @@ namespace VRChatCreatorTools.Repository;
 
 public class SettingRepository
 {
-    private readonly Realm _realm = Ioc.Default.GetService<Realm>()!;
+    private readonly Realm _realm = Ioc.Default.GetRequiredService<Realm>();
     private readonly IObservable<DbSettingModel> _settingModel;
     public SettingRepository()
     {
@@ -27,10 +27,7 @@ public class SettingRepository
         .Select(it =>
         {
             var (list, setting) = it;
-            if (string.IsNullOrEmpty(setting.SelectedUnityPath)) {
-                return list.FirstOrDefault();
-            }
-            return list.FirstOrDefault(x => x.Path == setting.SelectedUnityPath);
+            return string.IsNullOrEmpty(setting.SelectedUnityPath) ? list.FirstOrDefault() : list.FirstOrDefault(x => x.Path == setting.SelectedUnityPath);
         });
         ProjectDirectory = _settingModel.Select(it => it.ProjectDirectory);
         AppTheme = _settingModel.Select(it => Enum.Parse<AppTheme>(it.Theme));

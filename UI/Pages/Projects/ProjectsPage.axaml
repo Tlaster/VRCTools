@@ -5,6 +5,7 @@
              xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
              xmlns:projects="clr-namespace:VRChatCreatorTools.UI.Pages.Projects"
              xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:model="clr-namespace:VRChatCreatorTools.UI.Model"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="projects:ProjectsViewModel"
              x:Class="VRChatCreatorTools.UI.Pages.Projects.ProjectsPage">
@@ -17,9 +18,37 @@
             <Control Width="8"/>
             <Button Content="Open"/>
             <Control Width="8"/>
-            <TextBox Width="300" NewLine=""/>
+            <TextBox Width="300" NewLine="" Text="{CompiledBinding SearchText, Mode=TwoWay}"/>
         </StackPanel>
         <controls1:NavigationViewItemSeparator Grid.Row="1" />
-        <TextBlock Grid.Row="2" Text="Projects!"/>
+        <StackPanel Grid.Row="2" IsVisible="{CompiledBinding !Projects.Count}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="No projects found..." HorizontalAlignment="Center"/>
+            <Control Height="8"/>
+            <Button HorizontalAlignment="Center" Click="NewProjectClicked">
+                <TextBlock Text="Create new one"/>
+            </Button>
+        </StackPanel>
+        <ListBox Grid.Row="2" Items="{CompiledBinding Projects}" IsVisible="{CompiledBinding !!Projects.Count}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="model:UiProjectModel">
+                    <Grid HorizontalAlignment="Stretch" ColumnDefinitions="Auto, *, Auto">
+                        <StackPanel Orientation="Vertical" Margin="0, 4">
+                            <TextBlock Text="{CompiledBinding Name}" Classes="SubtitleTextBlockStyle"/>
+                            <Control Height="4"/>
+                            <TextBlock Text="{CompiledBinding Path}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <Button>
+                                <controls1:SymbolIcon Symbol="Folder"/>
+                            </Button>
+                            <Control Width="8"/>
+                            <Button>
+                                <controls1:SymbolIcon Symbol="Delete"/>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </controls:Page>
