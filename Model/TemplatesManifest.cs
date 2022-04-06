@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace VRChatCreatorTools.Model;
 
 
-public record Template(string Path, Template.ManifestData Manifest)
+internal record Template(string Path, Template.ManifestData Manifest)
 {
     public record ManifestData
     (
@@ -19,7 +19,7 @@ public record Template(string Path, Template.ManifestData Manifest)
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum Category
+internal enum Category
 {
     ProjectTemplate
 }

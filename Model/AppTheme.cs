@@ -1,6 +1,6 @@
 namespace VRChatCreatorTools.Model;
 
-public enum AppTheme
+internal enum AppTheme
 {
     Light,
     Dark,

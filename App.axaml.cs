@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using FluentAvalonia.UI.Controls;
@@ -16,12 +16,21 @@ using VRChatCreatorTools.UI;
 
 namespace VRChatCreatorTools;
 
-public class App : Application
+internal class App : Application
 {
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+        EnsureWorkingDirectory();
         Ioc.Default.ConfigureServices(ConfigureServices());
+    }
+
+    private void EnsureWorkingDirectory()
+    {
+        if (!Directory.Exists(Consts.DocumentDirectory))
+        {
+            Directory.CreateDirectory(Consts.DocumentDirectory);
+        }
     }
 
     private static IServiceProvider ConfigureServices()
@@ -39,6 +48,8 @@ public class App : Application
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime classicDesktopStyleApplicationLifetime:
+                var assets = AvaloniaLocator.Current.GetService<IAssetLoader>()!;
+                var bitmap = new Bitmap(assets.Open(new Uri("avares://VRChatCreatorTools/Assets/favicon.ico")));
                 classicDesktopStyleApplicationLifetime.MainWindow = new CoreWindow
                 {
                     Content = new RootShell(),
@@ -50,8 +61,9 @@ public class App : Application
                     Width = 1024,
                     Height = 576,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    Icon = new WindowIcon(bitmap)
                 };
-                classicDesktopStyleApplicationLifetime.MainWindow.Closing += (_, _) =>
+                classicDesktopStyleApplicationLifetime.Exit += (_, _) =>
                 {
                     Ioc.Default.GetRequiredService<Realm>().Dispose();
                 };

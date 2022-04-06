@@ -4,12 +4,12 @@ using Realms;
 
 namespace VRChatCreatorTools.Data.Model;
 
-public class DbProjectModel : RealmObject
+internal class DbProjectModel : RealmObject
 {
     [PrimaryKey] public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
     [Required] public string Name { get; set; } = string.Empty;
     [Required] public string Path { get; set; } = string.Empty;
-    public DateTime LastVisit { get; set; } = DateTime.UtcNow;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset LastVisit { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
 }

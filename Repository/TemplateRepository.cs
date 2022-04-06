@@ -13,7 +13,7 @@ using VRChatCreatorTools.Model;
 
 namespace VRChatCreatorTools.Repository;
 
-public class TemplateRepository
+internal class TemplateRepository
 {
     private readonly string _templateDirectory = Path.Combine(Consts.DocumentDirectory, "Templates");
     private readonly BehaviorSubject<IReadOnlyCollection<Template>> _templateList = new(new List<Template>());

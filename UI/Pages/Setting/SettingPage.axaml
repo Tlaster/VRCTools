@@ -39,7 +39,7 @@
                             <Button
                                 Classes="AppBarButton"
                                 CommandParameter="{CompiledBinding}" 
-                                Command="{Binding $parent[controls:Page].DataContext.RemoveUnityEditorCommand}">
+                                Command="{Binding $parent[setting:SettingPage].ViewModel.RemoveUnityEditorCommand}">
                                 <controls1:SymbolIcon Symbol="Delete"/>
                             </Button>
                         </StackPanel>

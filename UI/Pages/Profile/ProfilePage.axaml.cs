@@ -5,7 +5,7 @@ using VRChatCreatorTools.Lifecycle.Controls;
 
 namespace VRChatCreatorTools.UI.Pages.Profile;
 
-public partial class ProfilePage : Page
+internal partial class ProfilePage : Page
 {
     public ProfilePage()
     {

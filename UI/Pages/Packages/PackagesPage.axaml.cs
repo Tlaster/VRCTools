@@ -5,7 +5,7 @@ using VRChatCreatorTools.Lifecycle.Controls;
 
 namespace VRChatCreatorTools.UI.Pages.Packages;
 
-public partial class PackagesPage : Page
+internal partial class PackagesPage : Page
 {
     public PackagesPage()
     {

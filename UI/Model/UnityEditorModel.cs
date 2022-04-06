@@ -1,3 +1,3 @@
 ﻿namespace VRChatCreatorTools.UI.Model;
 
-public record UiUnityEditorModel(string Path);
+internal record UiUnityEditorModel(string Path);

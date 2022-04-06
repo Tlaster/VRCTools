@@ -9,7 +9,7 @@ using VRChatCreatorTools.UI.Model;
 
 namespace VRChatCreatorTools.UI.Pages.Setting;
 
-public partial class SettingPage : Page
+internal partial class SettingPage : Page<SettingViewModel>
 {
     public SettingPage()
     {
@@ -25,38 +25,40 @@ public partial class SettingPage : Page
             {
                 FileName = url,
                 UseShellExecute = true
-            });
+            })?.Dispose();
         }
     }
 
     private void AppTheme_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         e.Handled = true;
-        if (e.AddedItems.Count == 1 && e.AddedItems[0] is AppTheme item && DataContext is SettingViewModel vm)
+        if (e.AddedItems.Count == 1 && e.AddedItems[0] is AppTheme item && ViewModel != null)
         {
-            vm.SetAppTheme(item);
+            ViewModel.SetAppTheme(item);
         }
     }
 
     private async void AddUnity_OnClicked(object? sender, RoutedEventArgs e)
     {
         e.Handled = true;
-        var dialog = new OpenFileDialog();
-        dialog.AllowMultiple = false;
-        dialog.Title = "Please Select a Unity Editor";
-        var result = await dialog.ShowAsync(Window);
-        if (result is { Length: 1 } && !string.IsNullOrEmpty(result[0]) && DataContext is SettingViewModel viewModel)
+        var dialog = new OpenFileDialog
         {
-            viewModel.AddUnityEditor(result[0]);
+            AllowMultiple = false,
+            Title = "Please Select a Unity Editor"
+        };
+        var result = await dialog.ShowAsync(Window);
+        if (result is { Length: 1 } && !string.IsNullOrEmpty(result[0]) && ViewModel != null)
+        {
+            ViewModel.AddUnityEditor(result[0]);
         }
     }
 
     private void RefreshUnity_OnClicked(object? sender, RoutedEventArgs e)
     {
         e.Handled = true;
-        if (DataContext is SettingViewModel viewModel)
+        if (ViewModel != null)
         {
-            viewModel.RefreshUnityEditor();
+            ViewModel.RefreshUnityEditor();
         }
     }
 }

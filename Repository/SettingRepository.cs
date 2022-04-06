@@ -15,7 +15,7 @@ using VRChatCreatorTools.UI.Model;
 
 namespace VRChatCreatorTools.Repository;
 
-public class SettingRepository
+internal class SettingRepository
 {
     private readonly Realm _realm = Ioc.Default.GetRequiredService<Realm>();
     private readonly IObservable<DbSettingModel> _settingModel;

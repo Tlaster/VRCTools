@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Input;
 using VRChatCreatorTools.Lifecycle.ViewModel;
 using VRChatCreatorTools.Repository;
 using VRChatCreatorTools.UI.Model;
@@ -11,7 +13,7 @@ using VRChatCreatorTools.UI.Model;
 namespace VRChatCreatorTools.UI.Pages.Projects;
 
 [ObservableObject]
-public partial class ProjectsViewModel : ViewModel
+internal partial class ProjectsViewModel : ViewModel
 {
     private readonly ProjectRepository _projectRepository = Ioc.Default.GetRequiredService<ProjectRepository>();
     [ObservableProperty]
@@ -33,6 +35,12 @@ public partial class ProjectsViewModel : ViewModel
                 .Where(it => it.Name.Contains(SearchText, StringComparison.CurrentCultureIgnoreCase)).ToImmutableList();
         }
     }
+    
+    [ICommand]
+    private void DeleteProject(UiProjectModel project)
+    {
+        _projectRepository.Delete(project);
+    }
 
     public ProjectsViewModel()
     {
@@ -40,5 +48,15 @@ public partial class ProjectsViewModel : ViewModel
         {
             ProjectsList = projects;
         });
+    }
+
+    public void AddProject(string path)
+    {
+        var parent = Directory.GetParent(path)?.FullName;
+        var projectName = new DirectoryInfo(path).Name;
+        if (parent != null)
+        {
+            _projectRepository.Add(parent, projectName);
+        }
     }
 }

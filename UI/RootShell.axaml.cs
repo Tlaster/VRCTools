@@ -9,7 +9,7 @@ using VRChatCreatorTools.Repository;
 
 namespace VRChatCreatorTools.UI;
 
-public partial class RootShell : UserControl
+internal partial class RootShell : UserControl
 {
     private readonly SettingRepository _settingRepository = Ioc.Default.GetRequiredService<SettingRepository>();
 

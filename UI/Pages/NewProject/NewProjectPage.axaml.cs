@@ -10,7 +10,7 @@ using VRChatCreatorTools.UI.Pages.Setting;
 
 namespace VRChatCreatorTools.UI.Pages.NewProject;
 
-public partial class NewProjectPage : Page
+internal partial class NewProjectPage : Page<NewProjectViewModel>
 {
     public NewProjectPage()
     {
@@ -26,9 +26,9 @@ public partial class NewProjectPage : Page
     {
         var dialog = new OpenFolderDialog();
         var result = await dialog.ShowAsync(Window);
-        if (!string.IsNullOrEmpty(result) && DataContext is NewProjectViewModel viewModel)
+        if (!string.IsNullOrEmpty(result) && ViewModel != null)
         {
-            viewModel.SetProjectDirectory(result);
+            ViewModel.SetProjectDirectory(result);
         }
     }
 }

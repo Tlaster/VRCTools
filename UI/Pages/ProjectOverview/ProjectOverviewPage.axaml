@@ -4,11 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
              xmlns:projectOverview="clr-namespace:VRChatCreatorTools.UI.Pages.ProjectOverview"
+             xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:model="clr-namespace:VRChatCreatorTools.UI.Model"
+             xmlns:generic1="clr-namespace:System.Collections.Generic;assembly=System.Collections"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="projectOverview:ProjectOverviewViewModel"
              x:Class="VRChatCreatorTools.UI.Pages.ProjectOverview.ProjectOverviewPage">
     <controls:Page.DataContext>
         <projectOverview:ProjectOverviewViewModel/>
     </controls:Page.DataContext>
+    <Grid RowDefinitions="Auto, 16, *" Margin="16">
+        <Grid HorizontalAlignment="Stretch" ColumnDefinitions="Auto, *, Auto">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Button Click="BackClicked">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <controls1:SymbolIcon Symbol="Back" />
+                        <Control Width="4" />
+                        <TextBlock Text="Back" />
+                    </StackPanel>
+                </Button>
+                <Control Width="8" />
+                <controls1:CommandBarSeparator />
+                <Control Width="8" />
+                <TextBlock
+                    Text="{CompiledBinding Project^.Name, FallbackValue='Project Overview'}"
+                    VerticalAlignment="Center" />
+                <Separator />
+            </StackPanel>
+        </Grid>
+        <controls1:NavigationViewItemSeparator Grid.Row="1" />
+        <Panel Grid.Row="2">
+            <ItemsRepeater Items="{CompiledBinding ProjectMeta^.Dependencies}">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate DataType="model:IDependencyVersion">
+                        <TextBlock Text="{CompiledBinding Name}"/>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </Panel>
+    </Grid>
     
 </controls:Page>
