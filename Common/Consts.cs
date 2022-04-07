@@ -12,11 +12,11 @@ internal static class Consts
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 return System.IO.Path.Combine(
-                    System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile),
+                    System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments),
                     "VRChatCreatorTools");
             }
             return System.IO.Path.Combine(
-                System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments),
+                System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile),
                 ".config", "VRChatCreatorTools");   
         }
     }

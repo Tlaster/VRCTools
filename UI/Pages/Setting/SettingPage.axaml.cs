@@ -49,16 +49,7 @@ internal partial class SettingPage : Page<SettingViewModel>
         var result = await dialog.ShowAsync(Window);
         if (result is { Length: 1 } && !string.IsNullOrEmpty(result[0]) && ViewModel != null)
         {
-            ViewModel.AddUnityEditor(result[0]);
-        }
-    }
-
-    private void RefreshUnity_OnClicked(object? sender, RoutedEventArgs e)
-    {
-        e.Handled = true;
-        if (ViewModel != null)
-        {
-            ViewModel.RefreshUnityEditor();
+            await ViewModel.AddUnityEditor(result[0]);
         }
     }
 }

@@ -48,21 +48,7 @@ internal class App : Application
         switch (ApplicationLifetime)
         {
             case IClassicDesktopStyleApplicationLifetime classicDesktopStyleApplicationLifetime:
-                var assets = AvaloniaLocator.Current.GetService<IAssetLoader>()!;
-                var bitmap = new Bitmap(assets.Open(new Uri("avares://VRChatCreatorTools/Assets/favicon.ico")));
-                classicDesktopStyleApplicationLifetime.MainWindow = new CoreWindow
-                {
-                    Content = new RootShell(),
-                    Title = "VRChat Creator Tools",
-                    // TransparencyLevelHint = WindowTransparencyLevel.Mica,
-                    // Background = Brushes.Transparent,
-                    // ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.PreferSystemChrome,
-                    // ExtendClientAreaToDecorationsHint = true,
-                    Width = 1024,
-                    Height = 576,
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                    Icon = new WindowIcon(bitmap)
-                };
+                classicDesktopStyleApplicationLifetime.MainWindow = new RootWindow();
                 classicDesktopStyleApplicationLifetime.Exit += (_, _) =>
                 {
                     Ioc.Default.GetRequiredService<Realm>().Dispose();

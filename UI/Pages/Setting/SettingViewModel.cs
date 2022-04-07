@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using Realms.Sync;
@@ -11,6 +13,7 @@ using VRChatCreatorTools.UI.Model;
 
 namespace VRChatCreatorTools.UI.Pages.Setting;
 
+[ObservableObject]
 internal sealed partial class SettingViewModel : ViewModel
 {
     private readonly SettingRepository _repository = Ioc.Default.GetRequiredService<SettingRepository>();
@@ -27,13 +30,14 @@ internal sealed partial class SettingViewModel : ViewModel
         _repository.RemoveUnityVersion(model);
     }
     
-    public void AddUnityEditor(string path)
+    public async Task AddUnityEditor(string path)
     {
-        _repository.AddUnityVersion(path);
+        await _repository.AddUnityVersion(path);
     }
 
-    public void RefreshUnityEditor()
+    [ICommand]
+    private async Task RefreshUnityEditor()
     {
-        _repository.RefreshUnityData();
+        await _repository.RefreshUnityData();
     }
 }

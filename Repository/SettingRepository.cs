@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Win32;
 using ReactiveUI;
 using Realms;
+using Semver;
 using VRChatCreatorTools.Common.Extension;
 using VRChatCreatorTools.Data.Model;
 using VRChatCreatorTools.Model;
@@ -17,6 +20,9 @@ namespace VRChatCreatorTools.Repository;
 
 internal class SettingRepository
 {
+    private static readonly string[] SupportedUnityVersion = {
+        "2019.4.31f1",
+    };
     private readonly Realm _realm = Ioc.Default.GetRequiredService<Realm>();
     private readonly IObservable<DbSettingModel> _settingModel;
     public SettingRepository()
@@ -45,34 +51,42 @@ internal class SettingRepository
             return;
         }
 
-        RefreshUnityData();
+        _ = RefreshUnityData();
     }
 
-    public void RefreshUnityData()
+    public async Task RefreshUnityData()
     {
         var items = GetFromRegistry();
-        _realm.Write(() =>
+        foreach (var item in items)
         {
-            foreach (var item in items)
-            {
-                if (_realm.All<DbUnityEditorModel>().Any(x => x.Path == item))
-                {
-                    continue;
-                }
-                _realm.Add(new DbUnityEditorModel
-                {
-                    Path = item,
-                });
-            }
-        });
-        // var item = _realm.All<DbUnityEditorModel>().FirstOrDefault();
-        // if (item != null)
-        // {
-        //     AddOrUpdate(it => it.SelectedUnityPath = item.Path);
-        // }
+            await AddUnityVersion(item);
+        }
     }
-    public void AddUnityVersion(string path)
+
+    public async Task<bool> IsValidUnityVersion(string path)
     {
+        using var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = path,
+                Arguments = "-version",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+            }
+        };
+        process.Start();
+        var version = await process.StandardOutput.ReadToEndAsync();
+        await process.WaitForExitAsync();
+        return SupportedUnityVersion.Any(it => version.Contains(it));
+    }
+    
+    public async Task AddUnityVersion(string path)
+    {
+        if (!await IsValidUnityVersion(path))
+        {
+            return;
+        }
         _realm.Write(() =>
         {
             if (_realm.All<DbUnityEditorModel>().Any(it => it.Path == path))

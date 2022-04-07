@@ -17,7 +17,7 @@
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Unity Editors" Classes="SubtitleTextBlockStyle" />
                 <Control Width="8"/>
-                <Button Click="RefreshUnity_OnClicked" Classes="AppBarButton">
+                <Button Command="{CompiledBinding RefreshUnityEditorCommand}" Classes="AppBarButton">
                     <controls1:SymbolIcon Symbol="Refresh"/>
                 </Button>
             </StackPanel>
