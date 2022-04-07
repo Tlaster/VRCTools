@@ -5,5 +5,5 @@ namespace VRChatCreatorTools.Model;
 
 internal record UnityManifest(
     [property: JsonPropertyName("dependencies")]
-    Dictionary<string, string> Dependencies
+    IReadOnlyDictionary<string, string> Dependencies
 );

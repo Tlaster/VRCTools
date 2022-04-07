@@ -53,14 +53,14 @@
                                         IsVisible="{CompiledBinding Exists}"
                                         Command="{Binding $parent[projects:ProjectsPage].ViewModel.OpenUnityCommand}"
                                         CommandParameter="{CompiledBinding}">
-                                        <controls1:SymbolIcon Symbol="Open" />
+                                        <TextBlock Text="Open In Unity"/>
                                     </Button>
                                     <Control Width="8" />
                                     <Button
                                         IsVisible="{CompiledBinding Exists}"
                                         Command="{Binding $parent[projects:ProjectsPage].ViewModel.OpenFolderCommand}"
                                         CommandParameter="{CompiledBinding}">
-                                        <controls1:SymbolIcon Symbol="Folder" />
+                                        <TextBlock Text="Open Folder"/>
                                     </Button>
                                     <Control Width="8" />
                                     <Button

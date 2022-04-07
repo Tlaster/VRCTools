@@ -39,7 +39,10 @@ internal class App : Application
         services.AddSingleton<SettingRepository>();
         services.AddSingleton<TemplateRepository>();
         services.AddSingleton<ProjectRepository>();
-        services.AddSingleton<Realm>(_ => Realm.GetInstance(new RealmConfiguration(Path.Combine(Consts.DocumentDirectory, ".realm"))));
+        services.AddSingleton<PackageRepository>();
+        services.AddSingleton<Realm>(_ =>
+            Realm.GetInstance(new RealmConfiguration(Path.Combine(Consts.DocumentDirectory, ".realm"))
+                { ShouldDeleteIfMigrationNeeded = true }));
         return services.BuildServiceProvider();
     }
 

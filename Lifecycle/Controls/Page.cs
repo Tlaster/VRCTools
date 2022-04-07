@@ -12,7 +12,7 @@ namespace VRChatCreatorTools.Lifecycle.Controls;
 
 public class Page<T> : Page where T : ViewModel.ViewModel, new()
 {
-    public T? ViewModel => DataContext as T;
+    public T ViewModel => (DataContext as T)!;
 }
 
 public class Page : UserControl

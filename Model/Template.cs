@@ -14,7 +14,7 @@ internal record Template(string Path, Template.ManifestData Manifest)
         [property: JsonPropertyName("defaultScene")] string DefaultScene,
         [property: JsonPropertyName("version")] string Version,
         [property: JsonPropertyName("category")] Category Category,
-        [property: JsonPropertyName("dependencies")] Dictionary<string, string> Dependencies
+        [property: JsonPropertyName("dependencies")] IReadOnlyDictionary<string, string> Dependencies
     );
 }
 
@@ -22,4 +22,4 @@ internal record Template(string Path, Template.ManifestData Manifest)
 internal enum Category
 {
     ProjectTemplate
-}
+} 

@@ -23,7 +23,7 @@ internal record UiProjectModel(
     }
 }
 
-internal record UiProjectMetaModel(IReadOnlyList<IDependencyVersion> Dependencies)
+internal record UiProjectMetaModel(IReadOnlyCollection<IDependencyVersion> Dependencies)
 {
     internal static UiProjectMetaModel FromUnityManifest(UnityManifest unityManifest)
     {
@@ -59,15 +59,15 @@ internal interface IDependencyVersion
             var version = value[value.IndexOf('#')..].TrimStart('#');
             return new GitDependencyVersion(name, value, version);
         }
+        
+        if (value.StartsWith("file", StringComparison.CurrentCultureIgnoreCase))
+        {
+            return new LocalFileDependencyVersion(name, value);
+        }
 
         if (SemVersion.TryParse(value, SemVersionStyles.Strict, out var result) && result != null)
         {
             return new SenDependencyVersion(name, result);
-        }
-
-        if (value.StartsWith("file", StringComparison.CurrentCultureIgnoreCase))
-        {
-            return new LocalFileDependencyVersion(name, value);
         }
 
         throw new ArgumentException($"Invalid dependency version: {value}");
