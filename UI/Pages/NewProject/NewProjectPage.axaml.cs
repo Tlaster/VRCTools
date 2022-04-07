@@ -31,4 +31,10 @@ internal partial class NewProjectPage : Page<NewProjectViewModel>
             ViewModel.SetProjectDirectory(result);
         }
     }
+
+    private void Create_OnClicked(object? sender, RoutedEventArgs e)
+    {
+        ViewModel?.Create();
+        GoBack();
+    }
 }

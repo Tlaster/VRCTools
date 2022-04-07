@@ -12,16 +12,16 @@
     <controls:Page.DataContext>
         <projects:ProjectsViewModel />
     </controls:Page.DataContext>
-    <Grid RowDefinitions="Auto, 16, *" Margin="16">
-        <StackPanel Orientation="Horizontal">
+    <Grid RowDefinitions="Auto, 16, *">
+        <StackPanel Orientation="Horizontal" Margin="16,16,16,0">
             <Button Content="New Project" Click="NewProjectClicked" />
             <Control Width="8" />
             <Button Content="Open" Click="OpenFolder_OnClicked" />
             <Control Width="8" />
             <TextBox Width="300" NewLine="" Text="{CompiledBinding SearchText, Mode=TwoWay}" />
         </StackPanel>
-        <controls1:NavigationViewItemSeparator Grid.Row="1" />
-        <StackPanel Grid.Row="2" IsVisible="{CompiledBinding !Projects.Count}" HorizontalAlignment="Center"
+        <controls1:NavigationViewItemSeparator Grid.Row="1" Margin="16,0" />
+        <StackPanel Margin="16,0,16,16" Grid.Row="2" IsVisible="{CompiledBinding !Projects^.Count}" HorizontalAlignment="Center"
                     VerticalAlignment="Center">
             <TextBlock Text="No projects found..." HorizontalAlignment="Center" />
             <Control Height="8" />
@@ -29,8 +29,8 @@
                 <TextBlock Text="Create new one" />
             </Button>
         </StackPanel>
-        <ScrollViewer Grid.Row="2">
-            <ItemsRepeater Items="{CompiledBinding Projects}" IsVisible="{CompiledBinding !!Projects.Count}">
+        <ScrollViewer Padding="16,0" Grid.Row="2" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" >
+            <ItemsRepeater Items="{CompiledBinding Projects^}" IsVisible="{CompiledBinding !!Projects^.Count}">
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate DataType="model:UiProjectModel">
                         <Button Classes="AppBarButton"
@@ -40,13 +40,25 @@
                                 CommandParameter="{CompiledBinding}">
                             <Grid HorizontalAlignment="Stretch" ColumnDefinitions="Auto, *, Auto">
                                 <StackPanel Orientation="Vertical" Margin="0, 4">
-                                    <TextBlock Text="{CompiledBinding Name}" Classes="SubtitleTextBlockStyle" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <controls1:SymbolIcon Symbol="ReportHacked" IsVisible="{CompiledBinding !Exists}"/>
+                                        <Control Width="4" IsVisible="{CompiledBinding !Exists}"/>
+                                        <TextBlock Text="{CompiledBinding Name}" Classes="SubtitleTextBlockStyle" />
+                                    </StackPanel>
                                     <Control Height="4" />
                                     <TextBlock Text="{CompiledBinding Path}" />
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" Orientation="Horizontal">
                                     <Button
-                                        Command="{Binding $parent[projects:ProjectsPage].OnProjectOpenInFolderClicked}"
+                                        IsVisible="{CompiledBinding Exists}"
+                                        Command="{Binding $parent[projects:ProjectsPage].ViewModel.OpenUnityCommand}"
+                                        CommandParameter="{CompiledBinding}">
+                                        <controls1:SymbolIcon Symbol="Open" />
+                                    </Button>
+                                    <Control Width="8" />
+                                    <Button
+                                        IsVisible="{CompiledBinding Exists}"
+                                        Command="{Binding $parent[projects:ProjectsPage].ViewModel.OpenFolderCommand}"
                                         CommandParameter="{CompiledBinding}">
                                         <controls1:SymbolIcon Symbol="Folder" />
                                     </Button>

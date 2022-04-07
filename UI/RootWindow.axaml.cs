@@ -5,7 +5,7 @@ using FluentAvalonia.UI.Controls;
 
 namespace VRChatCreatorTools.UI;
 
-public partial class RootWindow : CoreWindow
+internal partial class RootWindow : CoreWindow
 {
     public RootWindow()
     {

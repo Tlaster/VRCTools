@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using VRChatCreatorTools.Lifecycle.Controls;
@@ -24,12 +25,11 @@ internal partial class ProjectsPage : Page<ProjectsViewModel>
 
     private void OnProjectClicked(UiProjectModel item)
     {
+        if (!item.Exists)
+        {
+            return;
+        }
         Navigate<ProjectOverviewPage>(item.Path);
-    }
-    
-    private void OnProjectOpenInFolderClicked(UiProjectModel item)
-    {
-        Process.Start(new ProcessStartInfo { UseShellExecute = true, FileName = item.Path })?.Dispose();
     }
 
     private async void OpenFolder_OnClicked(object? sender, RoutedEventArgs e)

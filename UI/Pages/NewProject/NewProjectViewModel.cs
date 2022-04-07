@@ -21,13 +21,13 @@ internal partial class NewProjectViewModel : ViewModel
     private readonly TemplateRepository _templateRepository = Ioc.Default.GetRequiredService<TemplateRepository>();
     private readonly ProjectRepository _projectRepository = Ioc.Default.GetRequiredService<ProjectRepository>();
     [ObservableProperty]
-    [AlsoNotifyCanExecuteFor(nameof(CreateCommand))]
+    [AlsoNotifyChangeFor(nameof(CanCreate))]
     private string _projectDirectory = string.Empty;
     [ObservableProperty]
-    [AlsoNotifyCanExecuteFor(nameof(CreateCommand))]
+    [AlsoNotifyChangeFor(nameof(CanCreate))]
     private string _projectName = string.Empty;
     [ObservableProperty] 
-    [AlsoNotifyCanExecuteFor(nameof(CreateCommand))]
+    [AlsoNotifyChangeFor(nameof(CanCreate))]
     private UiUnityEditorModel? _selectedUnityEditor = null;
     [ObservableProperty]
     private bool _loading = false;
@@ -41,8 +41,7 @@ internal partial class NewProjectViewModel : ViewModel
     public IObservable<IReadOnlyCollection<Template>> TemplateList => _templateRepository.TemplateList;
     public IObservable<IReadOnlyCollection<UiUnityEditorModel>> UnityEditorList => _repository.UnityVersionList;
 
-    [ICommand(CanExecute = nameof(CanCreate))]
-    private void Create()
+    public void Create()
     {
         if (SelectedTemplate == null || SelectedUnityEditor == null)
         {

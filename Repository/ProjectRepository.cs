@@ -37,10 +37,10 @@ internal class ProjectRepository
                 Arguments = $"-cloneFromTemplate {selectedTemplate.Path} -createProject {target}"
             }
         )?.Dispose();
-        Add(projectDirectory, projectName);
+        Add(projectDirectory, projectName, selectedUnityEditor.Path);
     }
     
-    public void Add(string projectDirectory, string projectName)
+    public void Add(string projectDirectory, string projectName, string unityVersion)
     {
         var target = Path.Combine(projectDirectory, projectName);
         if (_realm.All<DbProjectModel>().Any(x => x.Path == target))
@@ -52,7 +52,8 @@ internal class ProjectRepository
             var dbProject = new DbProjectModel
             {
                 Name = projectName,
-                Path = target
+                Path = target,
+                UnityVersion = unityVersion,
             };
             _realm.Add(dbProject);
         });
@@ -80,6 +81,18 @@ internal class ProjectRepository
             if (dbProject != null)
             {
                 _realm.Remove(dbProject);
+            }
+        });
+    }
+
+    public void VisitProject(string path)
+    {
+        _realm.Write(() =>
+        {
+            var dbProject = _realm.All<DbProjectModel>().FirstOrDefault(x => x.Path == path);
+            if (dbProject != null)
+            {
+                dbProject.LastVisited = DateTimeOffset.Now;
             }
         });
     }

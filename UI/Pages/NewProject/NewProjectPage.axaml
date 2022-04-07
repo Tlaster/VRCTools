@@ -30,7 +30,7 @@
                 <TextBlock Text="New Project" VerticalAlignment="Center" />
                 <Separator />
             </StackPanel>
-            <Button Grid.Column="2" Content="Create" DockPanel.Dock="Right" Command="{CompiledBinding CreateCommand}" />
+            <Button Grid.Column="2" Content="Create" DockPanel.Dock="Right" Click="Create_OnClicked" IsEnabled="{CompiledBinding CanCreate}" />
         </Grid>
         <controls1:NavigationViewItemSeparator Grid.Row="1" />
         <Panel Grid.Row="2" 
@@ -58,6 +58,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <controls1:CommandBarSeparator Grid.Column="1" Margin="8, 0, 0, 0" HorizontalAlignment="Left" />
+            <GridSplitter Grid.Column="1" Background="Transparent" />
             <avaloniaSpacedGrid:SpacedGrid
                 HorizontalAlignment="Stretch"
                 Grid.Column="2"

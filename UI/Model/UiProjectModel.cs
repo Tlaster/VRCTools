@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using Semver;
 using VRChatCreatorTools.Data.Model;
@@ -8,11 +9,17 @@ using VRChatCreatorTools.Model;
 
 namespace VRChatCreatorTools.UI.Model;
 
-internal record UiProjectModel(string Path, string Name)
+internal record UiProjectModel(
+    string Path,
+    string Name,
+    string UnityVersion
+)
 {
+    public bool Exists => Directory.Exists(Path);
+
     public static UiProjectModel FromDbModel(DbProjectModel model)
     {
-        return new UiProjectModel(model.Path, model.Name);
+        return new UiProjectModel(model.Path, model.Name, model.UnityVersion);
     }
 }
 
@@ -31,19 +38,24 @@ internal record UiProjectMetaModel(IReadOnlyList<IDependencyVersion> Dependencie
 internal interface IDependencyVersion
 {
     string Name { get; }
+
     internal record SenDependencyVersion(string Name, SemVersion Version) : IDependencyVersion;
+
     internal record GitDependencyVersion(string Name, string Url, string? Version) : IDependencyVersion;
+
     internal record LocalFileDependencyVersion(string Name, string Path) : IDependencyVersion;
+
     internal static IDependencyVersion FromString(string name, string value)
     {
         if (value.StartsWith("http", StringComparison.CurrentCultureIgnoreCase) ||
-            value.StartsWith("git", StringComparison.CurrentCultureIgnoreCase) || 
+            value.StartsWith("git", StringComparison.CurrentCultureIgnoreCase) ||
             value.StartsWith("ssh", StringComparison.CurrentCultureIgnoreCase))
         {
             if (!value.Contains('#'))
             {
                 return new GitDependencyVersion(name, value, null);
             }
+
             var version = value[value.IndexOf('#')..].TrimStart('#');
             return new GitDependencyVersion(name, value, version);
         }
@@ -57,7 +69,7 @@ internal interface IDependencyVersion
         {
             return new LocalFileDependencyVersion(name, value);
         }
-            
+
         throw new ArgumentException($"Invalid dependency version: {value}");
     }
 }

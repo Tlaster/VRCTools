@@ -27,5 +27,6 @@ internal partial class ProjectOverviewViewModel : ViewModel
     public void SetProjectPath(string path)
     {
         _projectPath.OnNext(path);
+        _projectRepository.VisitProject(path);
     }
 }
