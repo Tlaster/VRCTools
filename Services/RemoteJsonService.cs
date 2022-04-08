@@ -15,17 +15,14 @@ namespace VRChatCreatorTools.Services;
 internal class RemoteJsonService : IPackageService
 {
     private readonly string _remoteJsonUrl;
-    private readonly string _cacheDirectory;
-    private readonly string _cacheId;
+    private readonly string _cacheFile;
     private RemoteJsonServiceModel? _remoteJsonServiceModel;
     
-    private string CacheFilePath => Path.Combine(_cacheDirectory, _cacheId);
 
-    public RemoteJsonService(string remoteJsonUrl, string cacheDirectory, string cacheId)
+    public RemoteJsonService(string remoteJsonUrl, string cacheFile)
     {
         _remoteJsonUrl = remoteJsonUrl;
-        _cacheDirectory = cacheDirectory;
-        _cacheId = cacheId;
+        _cacheFile = cacheFile;
     }
 
     public async Task<IPackageModel?> FindPackage(string packageId, string? version)
@@ -60,7 +57,7 @@ internal class RemoteJsonService : IPackageService
         using var httpClient = new System.Net.Http.HttpClient();
         using var response = await httpClient.GetAsync(_remoteJsonUrl);
         await using var stream = await response.Content.ReadAsStreamAsync();
-        await using var fileStream = new FileStream(CacheFilePath, FileMode.Create, FileAccess.Write);
+        await using var fileStream = new FileStream(_cacheFile, FileMode.Create, FileAccess.Write);
         await stream.CopyToAsync(fileStream);
     }
     
@@ -70,12 +67,12 @@ internal class RemoteJsonService : IPackageService
         {
             return;
         }
-        if (!File.Exists(CacheFilePath))
+        if (!File.Exists(_cacheFile))
         {
             await DownloadCache();
         }
 
-        await using var fileStream = new FileStream(CacheFilePath, FileMode.Open, FileAccess.Read);
+        await using var fileStream = new FileStream(_cacheFile, FileMode.Open, FileAccess.Read);
         await using var stream = new MemoryStream();
         await fileStream.CopyToAsync(stream);
         stream.Position = 0;

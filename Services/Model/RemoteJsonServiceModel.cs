@@ -18,7 +18,7 @@ internal record RemoteJsonServiceModel
 internal record RemoteJsonPackageModel(
     string Id,
     string Name,
-    SemVersion Version,
+    string Version,
     string Description,
     string Url,
     IReadOnlyDictionary<string, string> Dependencies
