@@ -17,6 +17,14 @@
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Unity Editors" Classes="SubtitleTextBlockStyle" />
                 <Control Width="8"/>
+                <Button Click="AddUnity_OnClicked">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <controls1:SymbolIcon Symbol="Add"/>
+                        <Control Width="4"/>
+                        <TextBlock Text="Add"/>
+                    </StackPanel>
+                </Button>
+                <Control Width="8"/>
                 <Button Command="{CompiledBinding RefreshUnityEditorCommand}" Classes="AppBarButton">
                     <controls1:SymbolIcon Symbol="Refresh"/>
                 </Button>
@@ -46,15 +54,50 @@
                     </DataTemplate>
                 </ItemsRepeater.ItemTemplate>
             </ItemsRepeater>
-            <Control Height="8" />
-            <Button Click="AddUnity_OnClicked">
-                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <controls1:SymbolIcon Symbol="Add"/>
-                    <Control Width="4"/>
-                    <TextBlock Text="Add"/>
-                </StackPanel>
-            </Button>
             <Control Height="16" />
+            
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Repo" Classes="SubtitleTextBlockStyle" />
+                <Control Width="8"/>
+                <Button Click="AddRemoteService_OnClicked">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <controls1:SymbolIcon Symbol="Add"/>
+                        <Control Width="4"/>
+                        <TextBlock Text="Add"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Control Height="8" />
+            <ItemsRepeater Margin="8, 0" IsVisible="{CompiledBinding !!RemoteServices^.Count}" Items="{CompiledBinding RemoteServices^}">
+                <ItemsRepeater.Layout>
+                    <StackLayout Spacing="4"/>
+                </ItemsRepeater.Layout>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="model:UiRemoteServiceModel">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center" Text="{CompiledBinding Name}"/>
+                            <Control Width="8" IsVisible="{CompiledBinding !IsReadonly}"/>
+                            <Button
+                                IsVisible="{CompiledBinding !IsReadonly}"
+                                Classes="AppBarButton"
+                                CommandParameter="{CompiledBinding}" 
+                                Command="{Binding $parent[setting:SettingPage].EditRemoteService}">
+                                <controls1:SymbolIcon Symbol="Edit"/>
+                            </Button>
+                            <Control Width="8" IsVisible="{CompiledBinding !IsReadonly}"/>
+                            <Button
+                                IsVisible="{CompiledBinding !IsReadonly}"
+                                Classes="AppBarButton"
+                                CommandParameter="{CompiledBinding}" 
+                                Command="{Binding $parent[setting:SettingPage].ViewModel.RemoveRemoteServiceCommand}">
+                                <controls1:SymbolIcon Symbol="Delete"/>
+                            </Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+            <Control Height="16" />
+            
             <TextBlock Text="Theme" Classes="SubtitleTextBlockStyle" />
             <Control Height="8" />
             <ComboBox Items="{CompiledBinding AllAppTheme}" SelectedItem="{CompiledBinding AppTheme^}" SelectionChanged="AppTheme_OnSelectionChanged"/>

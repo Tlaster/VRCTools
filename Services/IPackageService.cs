@@ -13,12 +13,18 @@ internal interface IPackageService
     /// <param name="packageId">package id</param>
     /// <param name="version">package version, null to latest</param>
     /// <returns>Latest version of the package, return null if not found</returns>
-    Task<IPackageModel?> FindPackage(string packageId, string? version = null);
+    Task<IPackageModel?> FindPackage(string packageId, SemVersion? version = null);
     
     /// <summary>
     /// Finds the package version with the given id.
     /// </summary>
     /// <param name="packageId">package id</param>
     /// <returns>List of version that package provide, return empty list if not found</returns>
-    Task<IReadOnlyCollection<string>> GetPackageVersions(string packageId);
+    Task<IReadOnlyCollection<SemVersion>> GetPackageVersions(string packageId);
+    
+    /// <summary>
+    /// Get packages from the service.
+    /// </summary>
+    /// <returns>All the packages</returns>
+    Task<IReadOnlyCollection<IPackageModel>> GetPackages();// TODO: pagination
 }

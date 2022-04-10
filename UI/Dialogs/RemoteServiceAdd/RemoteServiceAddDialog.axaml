@@ -1,0 +1,28 @@
+<controls:Dialog 
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
+    xmlns:remoteServiceAdd="clr-namespace:VRChatCreatorTools.UI.RemoteServiceAdd"
+    xmlns:remoteServiceAdd1="clr-namespace:VRChatCreatorTools.UI.Dialogs.RemoteServiceAdd"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:DataType="remoteServiceAdd1:RemoteServiceAddViewModel"
+    Title="Add Remote Service"
+    PrimaryButtonText="Save"
+    CloseButtonText="Cancel"
+    PrimaryButtonCommand="{CompiledBinding SaveCommand}"
+    x:Class="VRChatCreatorTools.UI.Dialogs.RemoteServiceAdd.RemoteServiceAddDialog">
+    <controls:Dialog.DataContext>
+        <remoteServiceAdd1:RemoteServiceAddViewModel/>
+    </controls:Dialog.DataContext>
+    <StackPanel Orientation="Vertical">
+        <TextBlock Text="Name" />
+        <Control Height="4" />
+        <TextBox Text="{CompiledBinding Name, Mode=TwoWay}" />
+        <Control Height="8" />
+        <TextBlock Text="Url" />
+        <Control Height="4" />
+        <TextBox NewLine="" Text="{CompiledBinding Url, Mode=TwoWay}" />
+    </StackPanel>
+</controls:Dialog>

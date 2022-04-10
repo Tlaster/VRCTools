@@ -18,7 +18,7 @@ internal record RemoteJsonServiceModel
 internal record RemoteJsonPackageModel(
     string Id,
     string Name,
-    string Version,
+    SemVersion Version,
     string Description,
     string Url,
     IReadOnlyDictionary<string, string> Dependencies
@@ -38,6 +38,24 @@ internal record RemoteJsonPackageModel(
     }
 }
 
+internal class SemverJsonConverter : JsonConverter<SemVersion>
+{
+    public override SemVersion? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var value = reader.GetString();
+        if (value == null)
+        {
+            return null;
+        }
+
+        return SemVersion.TryParse(value, SemVersionStyles.Strict, out var result) ? result : null;
+    }
+
+    public override void Write(Utf8JsonWriter writer, SemVersion value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString());
+    }
+}
 internal record PackageModel
 (
     [property: JsonPropertyName("versions")]
@@ -50,7 +68,8 @@ internal record VersionModel
     [property: JsonPropertyName("displayName")]
     string DisplayName,
     [property: JsonPropertyName("version")] 
-    string Version,
+    [property: JsonConverter(typeof(SemverJsonConverter))]
+    SemVersion Version,
     [property: JsonPropertyName("unity")] string Unity,
     [property: JsonPropertyName("description")]
     string Description,

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Semver;
 using VRChatCreatorTools.Services.Model;
 
 namespace VRChatCreatorTools.UI.Model;
@@ -8,7 +9,7 @@ namespace VRChatCreatorTools.UI.Model;
 internal record UiPackageModel(
     string Id,
     string Name,
-    string Version,
+    SemVersion Version,
     string Description,
     string Url,
     IReadOnlyCollection<IDependencyVersion> Dependency

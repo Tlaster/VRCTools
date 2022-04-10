@@ -33,16 +33,25 @@
                     VerticalAlignment="Center" />
                 <Separator />
             </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button
+                    Command="{Binding $parent[projectOverview:ProjectOverviewPage].ViewModel.OpenUnityCommand}">
+                    <TextBlock Text="Open In Unity"/>
+                </Button>
+                <Control Width="8" />
+                <Button
+                    Command="{Binding $parent[projectOverview:ProjectOverviewPage].ViewModel.OpenFolderCommand}">
+                    <TextBlock Text="Open Folder"/>
+                </Button>
+            </StackPanel>
         </Grid>
         <controls1:NavigationViewItemSeparator Grid.Row="1" />
         <Panel Grid.Row="2">
-            <ItemsRepeater Items="{CompiledBinding ProjectMeta^.Dependencies}">
-                <ItemsRepeater.ItemTemplate>
-                    <DataTemplate DataType="model:IDependencyVersion">
-                        <TextBlock Text="{CompiledBinding Name}"/>
-                    </DataTemplate>
-                </ItemsRepeater.ItemTemplate>
-            </ItemsRepeater>
+            <TabControl>
+                <TabControl.ItemTemplate>
+                    
+                </TabControl.ItemTemplate>
+            </TabControl>
         </Panel>
     </Grid>
     

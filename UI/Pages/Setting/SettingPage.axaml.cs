@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
-using System.Linq.Expressions;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using FluentAvalonia.Core;
 using VRChatCreatorTools.Lifecycle.Controls;
 using VRChatCreatorTools.Model;
 using VRChatCreatorTools.UI.Model;
+using Button = Avalonia.Controls.Button;
+using RemoteServiceAddDialog = VRChatCreatorTools.UI.Dialogs.RemoteServiceAdd.RemoteServiceAddDialog;
+using RemoteServiceEditDialog = VRChatCreatorTools.UI.Dialogs.RemoteServiceEdit.RemoteServiceEditDialog;
 
 namespace VRChatCreatorTools.UI.Pages.Setting;
 
@@ -32,7 +33,7 @@ internal partial class SettingPage : Page<SettingViewModel>
     private void AppTheme_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         e.Handled = true;
-        if (e.AddedItems.Count == 1 && e.AddedItems[0] is AppTheme item && ViewModel != null)
+        if (e.AddedItems.Count == 1 && e.AddedItems[0] is AppTheme item)
         {
             ViewModel.SetAppTheme(item);
         }
@@ -47,9 +48,19 @@ internal partial class SettingPage : Page<SettingViewModel>
             Title = "Please Select a Unity Editor"
         };
         var result = await dialog.ShowAsync(Window);
-        if (result is { Length: 1 } && !string.IsNullOrEmpty(result[0]) && ViewModel != null)
+        if (result is { Length: 1 } && !string.IsNullOrEmpty(result[0]))
         {
             await ViewModel.AddUnityEditor(result[0]);
         }
+    }
+
+    private void AddRemoteService_OnClicked(object? sender, RoutedEventArgs e)
+    {
+        new RemoteServiceAddDialog().ShowAsync();
+    }
+
+    private void EditRemoteService(UiRemoteServiceModel item)
+    {
+        new RemoteServiceEditDialog(item).ShowAsync();
     }
 }

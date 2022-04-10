@@ -1,6 +1,10 @@
 [
   {
-    "name": "VRChat Official",
+    "name": "VRChat Official SDK Packages",
     "url": "https://vrchat.github.io/packages/"
+  },
+  {
+    "name": "VRChat Curated Packages",
+    "url": "https://vrchat-community.github.io/curated-packages/"
   }
 ]

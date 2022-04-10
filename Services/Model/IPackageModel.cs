@@ -7,7 +7,7 @@ internal interface IPackageModel
 {
     string Id { get; }
     string Name { get; }
-    string Version { get; }
+    SemVersion Version { get; }
     string Description { get; }
     string Url { get; }
     IReadOnlyDictionary<string, string> Dependencies { get; }

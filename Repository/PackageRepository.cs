@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Platform;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Realms;
+using Semver;
+using VRChatCreatorTools.Common;
 using VRChatCreatorTools.Common.Extension;
 using VRChatCreatorTools.Data.Model;
 using VRChatCreatorTools.Model;
@@ -20,25 +24,50 @@ namespace VRChatCreatorTools.Repository;
 internal class PackageRepository
 {
     private readonly Realm _realm = Ioc.Default.GetRequiredService<Realm>();
-    private readonly IObservable<IReadOnlyDictionary<UiRemoteServiceModel, RemoteJsonService>> _services;
+    private readonly IObservable<IReadOnlyDictionary<UiRemoteServiceModel, IPackageService>> _services;
 
     public PackageRepository()
     {
-        RemoteServices = _realm.All<DbRemoteService>().AsObservable()
-            .Select(it => it.Select(UiRemoteServiceModel.FromDb).ToImmutableList());
-        _services = RemoteServices.Select(it =>
-            it.ToImmutableDictionary(model => model, model => new RemoteJsonService(model.Url, "")));
+        _services = _realm.All<DbRemoteService>().AsObservable().Select(services =>
+            services.OrderBy(service => service.CreatedAt).ToImmutableDictionary(UiRemoteServiceModel.FromDb,
+                model => new RemoteJsonService(model.RemoteUrl) as IPackageService));
+        RemoteServices = _services.Select(it => it.Keys.ToImmutableList());
         InitData();
     }
 
     public IObservable<IReadOnlyCollection<UiRemoteServiceModel>> RemoteServices { get; }
 
-    public async Task<IReadOnlyCollection<UiPackageModel>> FindPackage(string packageId, string? version)
+    public async Task<IReadOnlyDictionary<UiRemoteServiceModel, UiPackageModel>> FindPackage(string packageId,
+        SemVersion? version)
     {
-        var service =
-            await _services.Select(it => it.Select(service => service.Value.FindPackage(packageId, version)));
-        var result = await Task.WhenAll(service);
-        return result.Where(it => it != null).Select(it => UiPackageModel.FromIPackageModel(it!)).ToImmutableList();
+        var result = new Dictionary<UiRemoteServiceModel, UiPackageModel>();
+        var items = await _services.FirstOrDefaultAsync();
+        if (items == null)
+        {
+            return result;
+        }
+
+        foreach (var (key, value) in items)
+        {
+            var package = await value.FindPackage(packageId, version);
+            if (package != null)
+            {
+                result.Add(key, UiPackageModel.FromIPackageModel(package));
+            }
+        }
+
+        return result;
+    }
+
+    public async Task<IReadOnlyCollection<SemVersion>> GetPackageVersions(UiRemoteServiceModel remote, string packageId)
+    {
+        var service = await _services.FirstOrDefaultAsync();
+        if (service == null)
+        {
+            return new List<SemVersion>();
+        }
+
+        return await service[remote].GetPackageVersions(packageId);
     }
 
     private void InitData()
@@ -64,11 +93,11 @@ internal class PackageRepository
 
         foreach (var (name, url) in data)
         {
-            AddService(name, url);
+            AddService(name, url, isReadonly: true);
         }
     }
 
-    public void AddService(string name, string url)
+    public void AddService(string name, string url, bool isReadonly = false)
     {
         if (_realm.All<DbRemoteService>().Any(it => it.RemoteUrl == url))
         {
@@ -81,8 +110,24 @@ internal class PackageRepository
             {
                 Name = name,
                 RemoteUrl = url,
-                CacheId = Guid.NewGuid().ToString().Replace('-', '_')
+                IsReadonly = isReadonly
             });
+        });
+    }
+
+    public void UpdateService(UiRemoteServiceModel item, string name, string url)
+    {
+        var db = _realm.Find<DbRemoteService>(item.Id);
+        if (db == null)
+        {
+            return;
+        }
+
+        _realm.Write(() =>
+        {
+            db.Name = name;
+            db.RemoteUrl = url;
+            db.UpdatedAt = DateTimeOffset.UtcNow;
         });
     }
 
@@ -93,7 +138,6 @@ internal class PackageRepository
         {
             return;
         }
-
         _realm.Write(() => { _realm.Remove(service); });
     }
 }

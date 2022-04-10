@@ -16,7 +16,9 @@ namespace VRChatCreatorTools.UI.Pages.Setting;
 [ObservableObject]
 internal sealed partial class SettingViewModel : ViewModel
 {
+    private readonly PackageRepository _packageRepository = Ioc.Default.GetRequiredService<PackageRepository>();
     private readonly SettingRepository _repository = Ioc.Default.GetRequiredService<SettingRepository>();
+    public IObservable<IReadOnlyCollection<UiRemoteServiceModel>> RemoteServices => _packageRepository.RemoteServices;
     public IObservable<IReadOnlyCollection<UiUnityEditorModel>> UnityList => _repository.UnityVersionList;
     public IObservable<UiUnityEditorModel?> SelectedUnity => _repository.SelectedUnity;
     public IEnumerable<AppTheme> AllAppTheme => Enum.GetValues<AppTheme>();
@@ -24,6 +26,18 @@ internal sealed partial class SettingViewModel : ViewModel
     public void SetAppTheme(AppTheme theme) => _repository.SetAppTheme(theme);
 
 
+    [ICommand]
+    private void EditRemoteService(UiRemoteServiceModel item)
+    {
+        
+    }
+
+    [ICommand]
+    private void RemoveRemoteService(UiRemoteServiceModel item)
+    {
+        
+    }
+    
     [ICommand]
     private void RemoveUnityEditor(UiUnityEditorModel model)
     {

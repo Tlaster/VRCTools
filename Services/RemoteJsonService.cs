@@ -4,79 +4,74 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Semver;
 using VRChatCreatorTools.Services.Model;
 
 namespace VRChatCreatorTools.Services;
 
 /// About the package version:
-/// From https://vrchat.github.io/packages/ , the last item is the last version of the package
-/// But not sure if it is the same for any other package sources, since there's no other package source right now :)
-
+/// Both https://vrchat.github.io/packages/ and https://vrchat-community.github.io/curated-packages/ seems to use semver,
+/// But not sure if this is the required format.
+/// Since there if no official documentation, nor any other package source.
 internal class RemoteJsonService : IPackageService
 {
     private readonly string _remoteJsonUrl;
-    private readonly string _cacheFile;
     private RemoteJsonServiceModel? _remoteJsonServiceModel;
-    
 
-    public RemoteJsonService(string remoteJsonUrl, string cacheFile)
+    public RemoteJsonService(string remoteJsonUrl)
     {
         _remoteJsonUrl = remoteJsonUrl;
-        _cacheFile = cacheFile;
     }
 
-    public async Task<IPackageModel?> FindPackage(string packageId, string? version)
+    public async Task<IPackageModel?> FindPackage(string packageId, SemVersion? version)
     {
         await LoadCache();
         if (_remoteJsonServiceModel == null || !_remoteJsonServiceModel.Packages.TryGetValue(packageId, out var model))
         {
             return null;
         }
+
         var item = version switch
         {
-            // TODO: Handle versions, since the last item might not be the latest
-            null => model.Versions.Values.LastOrDefault(),// since we don't know the version, and the version might not be semver, we just get the latest
-            _ =>  model.Versions.Values.FirstOrDefault(it => it.Version == version),
+            null => model.Versions.Values.MaxBy(it => it.Version),
+            _ => model.Versions.Values.FirstOrDefault(it => it.Version == version),
         };
         return item == null ? null : RemoteJsonPackageModel.FromJsonModel(item);
     }
 
-    public async Task<IReadOnlyCollection<string>> GetPackageVersions(string packageId)
+    public async Task<IReadOnlyCollection<SemVersion>> GetPackageVersions(string packageId)
     {
         await LoadCache();
         if (_remoteJsonServiceModel == null || !_remoteJsonServiceModel.Packages.TryGetValue(packageId, out var model))
         {
-            return new List<string>();
+            return new List<SemVersion>();
         }
 
         return model.Versions.Values.Select(it => it.Version).ToImmutableList();
     }
 
-    private async Task DownloadCache()
+    public async Task<IReadOnlyCollection<IPackageModel>> GetPackages()
     {
-        using var httpClient = new System.Net.Http.HttpClient();
-        using var response = await httpClient.GetAsync(_remoteJsonUrl);
-        await using var stream = await response.Content.ReadAsStreamAsync();
-        await using var fileStream = new FileStream(_cacheFile, FileMode.Create, FileAccess.Write);
-        await stream.CopyToAsync(fileStream);
+        await LoadCache();
+        if (_remoteJsonServiceModel == null)
+        {
+            return new List<IPackageModel>();
+        }
+
+        return _remoteJsonServiceModel.Packages.Values.Select(it => it.Versions.Values.MaxBy(model => model.Version))
+            .Where(it => it != null).Select(RemoteJsonPackageModel.FromJsonModel!).ToImmutableList();
     }
-    
+
     private async Task LoadCache()
     {
         if (_remoteJsonServiceModel != null)
         {
             return;
         }
-        if (!File.Exists(_cacheFile))
-        {
-            await DownloadCache();
-        }
 
-        await using var fileStream = new FileStream(_cacheFile, FileMode.Open, FileAccess.Read);
-        await using var stream = new MemoryStream();
-        await fileStream.CopyToAsync(stream);
-        stream.Position = 0;
+        using var httpClient = new System.Net.Http.HttpClient();
+        using var response = await httpClient.GetAsync(_remoteJsonUrl);
+        await using var stream = await response.Content.ReadAsStreamAsync();
         _remoteJsonServiceModel = await JsonSerializer.DeserializeAsync<RemoteJsonServiceModel>(stream);
     }
-
 }
