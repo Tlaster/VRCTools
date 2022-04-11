@@ -17,7 +17,7 @@ internal partial class ProjectOverviewPage : Page<ProjectOverviewViewModel>
     protected override void OnCreated(object parameter)
     {
         // consider project path to be unique
-        if (parameter is string path && ViewModel != null)
+        if (parameter is string path)
         {
             ViewModel.SetProjectPath(path);
         }

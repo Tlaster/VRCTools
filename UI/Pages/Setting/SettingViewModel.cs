@@ -13,7 +13,6 @@ using VRChatCreatorTools.UI.Model;
 
 namespace VRChatCreatorTools.UI.Pages.Setting;
 
-[ObservableObject]
 internal sealed partial class SettingViewModel : ViewModel
 {
     private readonly PackageRepository _packageRepository = Ioc.Default.GetRequiredService<PackageRepository>();

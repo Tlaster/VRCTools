@@ -7,7 +7,6 @@ using VRChatCreatorTools.UI.Model;
 
 namespace VRChatCreatorTools.UI.Dialogs.RemoteServiceEdit;
 
-[ObservableObject]
 internal partial class RemoteServiceEditViewModel : ViewModel
 {
     private readonly PackageRepository _packageRepository = Ioc.Default.GetRequiredService<PackageRepository>();

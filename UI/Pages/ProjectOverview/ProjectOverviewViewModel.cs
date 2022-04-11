@@ -12,7 +12,6 @@ using VRChatCreatorTools.UI.Model;
 
 namespace VRChatCreatorTools.UI.Pages.ProjectOverview;
 
-[ObservableObject]
 internal partial class ProjectOverviewViewModel : ViewModel
 {
     private readonly ProjectRepository _projectRepository = Ioc.Default.GetRequiredService<ProjectRepository>();

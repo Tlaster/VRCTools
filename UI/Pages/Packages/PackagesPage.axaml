@@ -6,10 +6,10 @@
              xmlns:vrChatCreatorTools="clr-namespace:VRChatCreatorTools"
              xmlns:packages="clr-namespace:VRChatCreatorTools.UI.Pages.Packages"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="packages:PackagesVIewModel"
+             x:DataType="packages:PackagesViewModel"
              x:Class="VRChatCreatorTools.UI.Pages.Packages.PackagesPage">
     <controls:Page.DataContext>
-        <packages:PackagesVIewModel/>
+        <packages:PackagesViewModel/>
     </controls:Page.DataContext>
     Welcome to Avalonia!
 </controls:Page>

@@ -4,17 +4,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="clr-namespace:VRChatCreatorTools.Lifecycle.Controls"
-    xmlns:remoteServiceEdit="clr-namespace:VRChatCreatorTools.UI.RemoteServiceEdit"
-    xmlns:remoteServiceEdit1="clr-namespace:VRChatCreatorTools.UI.Dialogs.RemoteServiceEdit"
+    xmlns:remoteServiceEdit="clr-namespace:VRChatCreatorTools.UI.Dialogs.RemoteServiceEdit"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-    x:DataType="remoteServiceEdit1:RemoteServiceEditViewModel"
+    x:DataType="remoteServiceEdit:RemoteServiceEditViewModel"
     Title="Edit Remote Service"
     PrimaryButtonText="Save"
     CloseButtonText="Cancel"
     PrimaryButtonCommand="{CompiledBinding SaveCommand}"
     x:Class="VRChatCreatorTools.UI.Dialogs.RemoteServiceEdit.RemoteServiceEditDialog">
     <controls:Dialog.DataContext>
-        <remoteServiceEdit1:RemoteServiceEditViewModel />
+        <remoteServiceEdit:RemoteServiceEditViewModel />
     </controls:Dialog.DataContext>
     <StackPanel Orientation="Vertical">
         <TextBlock Text="Name" />
