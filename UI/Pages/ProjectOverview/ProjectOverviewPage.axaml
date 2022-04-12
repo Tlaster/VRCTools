@@ -9,6 +9,7 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:model="clr-namespace:VRChatCreatorTools.UI.Model"
              xmlns:generic1="clr-namespace:System.Collections.Generic;assembly=System.Collections"
+             xmlns:controls2="clr-namespace:VRChatCreatorTools.UI.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="projectOverview:ProjectOverviewViewModel"
              x:Class="VRChatCreatorTools.UI.Pages.ProjectOverview.ProjectOverviewPage">
@@ -48,9 +49,12 @@
         <controls1:NavigationViewItemSeparator Grid.Row="1" />
         <Panel Grid.Row="2">
             <TabControl>
-                <TabControl.ItemTemplate>
-                    
-                </TabControl.ItemTemplate>
+                <TabItem Header="All Packages">
+                    <controls2:PackageListView Items="{CompiledBinding AllPackages^}"/>
+                </TabItem>
+                <TabItem Header="Installed Packages">
+                    <controls2:PackageListView Items="{CompiledBinding InstalledPackages^}"/>
+                </TabItem>
             </TabControl>
         </Panel>
     </Grid>

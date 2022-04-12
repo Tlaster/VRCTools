@@ -13,7 +13,7 @@ internal interface IPackageService
     /// <param name="packageId">package id</param>
     /// <param name="version">package version, null to latest</param>
     /// <returns>Latest version of the package, return null if not found</returns>
-    Task<IPackageModel?> FindPackage(string packageId, SemVersion? version = null);
+    Task<IPackageModel?> GetPackage(string packageId, SemVersion? version = null);
     
     /// <summary>
     /// Finds the package version with the given id.

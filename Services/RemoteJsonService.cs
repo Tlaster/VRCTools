@@ -23,7 +23,7 @@ internal class RemoteJsonService : IPackageService
         _remoteJsonUrl = remoteJsonUrl;
     }
 
-    public async Task<IPackageModel?> FindPackage(string packageId, SemVersion? version)
+    public async Task<IPackageModel?> GetPackage(string packageId, SemVersion? version)
     {
         await LoadCache();
         if (_remoteJsonServiceModel == null || !_remoteJsonServiceModel.Packages.TryGetValue(packageId, out var model))

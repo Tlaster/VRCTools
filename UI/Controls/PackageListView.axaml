@@ -1,0 +1,35 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:VRChatCreatorTools.UI.Controls"
+        xmlns:model="clr-namespace:VRChatCreatorTools.UI.Model"
+        xmlns:controls1="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia">
+    <Design.PreviewWith>
+        <controls:PackageListView />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|PackageListView">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid ColumnDefinitions="*, 16, *">
+                    <ListBox Items="{TemplateBinding Items}" SelectionMode="Single" SelectedItem="{TemplateBinding SelectedItem, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="model:UiPackageModel">
+                                <Grid ColumnDefinitions="Auto, *, Auto">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{CompiledBinding Name}"/>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="2" Text="{CompiledBinding Version}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <controls1:CommandBarSeparator Grid.Column="1" HorizontalAlignment="Center" />
+                    <GridSplitter Grid.Column="1" Background="Transparent" />
+                    <Grid Grid.Column="2">
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem.Name}"/>
+                    </Grid>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

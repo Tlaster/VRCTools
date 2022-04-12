@@ -37,26 +37,44 @@ internal class PackageRepository
 
     public IObservable<IReadOnlyCollection<UiRemoteServiceModel>> RemoteServices { get; }
 
-    public async Task<IReadOnlyDictionary<UiRemoteServiceModel, UiPackageModel>> FindPackage(string packageId,
-        SemVersion? version)
+    public async Task<IReadOnlyCollection<UiPackageModel>> GetPackages()
     {
-        var result = new Dictionary<UiRemoteServiceModel, UiPackageModel>();
         var items = await _services.FirstOrDefaultAsync();
         if (items == null)
         {
-            return result;
+            return new List<UiPackageModel>();
         }
 
-        foreach (var (key, value) in items)
+        var packages =
+            await Task.WhenAll(items.Select(async it => KeyValuePair.Create(it.Key, await it.Value.GetPackages())));
+        return packages.SelectMany(pair => pair.Value.Select(it => KeyValuePair.Create(it, pair.Key)))
+            .GroupBy(it => it.Key)
+            .Select(it => UiPackageModel.FromIPackageModel(it.Key, it.Select(pair => pair.Value))).ToImmutableList();
+    }
+
+    public async Task<UiPackageModel?> GetPackage(string packageId,
+        UiRemoteServiceModel? provider = null,
+        SemVersion? version = null)
+    {
+        var items = await _services.FirstOrDefaultAsync();
+        if (items == null)
         {
-            var package = await value.FindPackage(packageId, version);
-            if (package != null)
-            {
-                result.Add(key, UiPackageModel.FromIPackageModel(package));
-            }
+            return null;
         }
 
-        return result;
+        var package = await Task.WhenAll(items.Select(async it =>
+            KeyValuePair.Create(it.Key, await it.Value.GetPackage(packageId, version))));
+        var dic = package.Where(it => it.Value != null).ToDictionary(x => x.Key, x => x.Value!);
+        if (!dic.Any())
+        {
+            return null;
+        }
+        if (provider != null)
+        {
+            return dic.TryGetValue(provider, out var pkg) ? UiPackageModel.FromIPackageModel(pkg, dic.Keys) : null;
+        }
+
+        return UiPackageModel.FromIPackageModel(dic.FirstOrDefault().Value, dic.Keys);
     }
 
     public async Task<IReadOnlyCollection<SemVersion>> GetPackageVersions(UiRemoteServiceModel remote, string packageId)
@@ -138,6 +156,7 @@ internal class PackageRepository
         {
             return;
         }
+
         _realm.Write(() => { _realm.Remove(service); });
     }
 }

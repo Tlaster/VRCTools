@@ -12,10 +12,11 @@ internal record UiPackageModel(
     SemVersion Version,
     string Description,
     string Url,
-    IReadOnlyCollection<IDependencyVersion> Dependency
+    IReadOnlyCollection<IDependencyVersion> Dependency,
+    IReadOnlyCollection<UiRemoteServiceModel> Providers
 )
 {
-    public static UiPackageModel FromIPackageModel(IPackageModel model)
+    public static UiPackageModel FromIPackageModel(IPackageModel model, IEnumerable<UiRemoteServiceModel> providers)
     {
         return new UiPackageModel(
             model.Id,
@@ -23,7 +24,8 @@ internal record UiPackageModel(
             model.Version,
             model.Description,
             model.Url,
-            model.Dependencies.Select(it => IDependencyVersion.FromString(it.Key, it.Value)).ToImmutableList()
+            model.Dependencies.Select(it => IDependencyVersion.FromString(it.Key, it.Value)).ToImmutableList(),
+            providers.ToImmutableList()
         );
     }
 }
