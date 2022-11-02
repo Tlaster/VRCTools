@@ -26,7 +26,7 @@ internal partial class NewProjectPage : Page<NewProjectViewModel>
     {
         var dialog = new OpenFolderDialog();
         var result = await dialog.ShowAsync(Window);
-        if (!string.IsNullOrEmpty(result) && ViewModel != null)
+        if (!string.IsNullOrEmpty(result))
         {
             ViewModel.SetProjectDirectory(result);
         }

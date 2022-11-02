@@ -25,19 +25,19 @@ internal sealed partial class SettingViewModel : ViewModel
     public void SetAppTheme(AppTheme theme) => _repository.SetAppTheme(theme);
 
 
-    [ICommand]
+    [RelayCommand]
     private void EditRemoteService(UiRemoteServiceModel item)
     {
         
     }
 
-    [ICommand]
+    [RelayCommand]
     private void RemoveRemoteService(UiRemoteServiceModel item)
     {
         
     }
     
-    [ICommand]
+    [RelayCommand]
     private void RemoveUnityEditor(UiUnityEditorModel model)
     {
         _repository.RemoveUnityVersion(model);
@@ -48,7 +48,7 @@ internal sealed partial class SettingViewModel : ViewModel
         await _repository.AddUnityVersion(path);
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task RefreshUnityEditor()
     {
         await _repository.RefreshUnityData();

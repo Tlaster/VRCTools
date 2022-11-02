@@ -36,7 +36,7 @@
                         <Button Classes="AppBarButton"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
-                                Command="{Binding $parent[projects:ProjectsPage].OnProjectClicked}"
+                                Command="{Binding $parent[projects:ProjectsPage].ProjectClickedCommand}"
                                 CommandParameter="{CompiledBinding}">
                             <Grid HorizontalAlignment="Stretch" ColumnDefinitions="Auto, *, Auto">
                                 <StackPanel Orientation="Vertical" Margin="0, 4">

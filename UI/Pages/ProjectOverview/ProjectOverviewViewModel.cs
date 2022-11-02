@@ -46,7 +46,7 @@ internal partial class ProjectOverviewViewModel : ViewModel
         _projectRepository.VisitProject(path);
     }
 
-    [ICommand]
+    [RelayCommand]
     private async void OpenFolder()
     {
         var item = await Project.FirstOrDefaultAsync();
@@ -58,7 +58,7 @@ internal partial class ProjectOverviewViewModel : ViewModel
         Process.Start(new ProcessStartInfo { UseShellExecute = true, FileName = item.Path })?.Dispose();
     }
 
-    [ICommand]
+    [RelayCommand]
     private async void OpenUnity()
     {
         var item = await Project.FirstOrDefaultAsync();

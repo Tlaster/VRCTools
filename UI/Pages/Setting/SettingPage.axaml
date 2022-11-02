@@ -34,7 +34,7 @@
                        IsVisible="{CompiledBinding !!UnityList^.Count}"
                        Text="This lists all Unity Editors found on your system which can make new VRChat projects." />
             <Control Height="8" IsVisible="{CompiledBinding !!UnityList^.Count}" />
-            <TextBlock IsVisible="{CompiledBinding !UnityList^.Count}">No Unity Editor found!</TextBlock>
+            <TextBlock IsVisible="{CompiledBinding !UnityList^.Count}" Text="No Unity Editor found!"/>
             <ItemsRepeater Margin="8, 0" IsVisible="{CompiledBinding !!UnityList^.Count}" Items="{CompiledBinding UnityList^}">
                 <ItemsRepeater.Layout>
                     <StackLayout Spacing="4"/>

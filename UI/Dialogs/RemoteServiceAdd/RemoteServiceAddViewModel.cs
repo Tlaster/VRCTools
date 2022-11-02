@@ -13,7 +13,7 @@ internal partial class RemoteServiceAddViewModel : ViewModel
     private string _name = string.Empty;
     [ObservableProperty]
     private string _url = string.Empty;
-    [ICommand]
+    [RelayCommand]
     private void Save()
     {
         _packageRepository.AddService(Name, Url);

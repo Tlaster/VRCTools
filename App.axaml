@@ -5,9 +5,7 @@
     <Application.Styles>
         <styling:FluentAvaloniaTheme
             CustomAccentColor="#FF166ccd"
-            UseSystemThemeOnWindows="True"
-            UseSystemFontOnWindows="True"
-            UseUserAccentColorOnWindows="True" />
+            UseSystemFontOnWindows="True" />
         <StyleInclude Source="/UI/Controls/PackageListView.axaml"/>
         <Style Selector="TextBox">
             <Setter Property="FontFamily" Value="Microsoft YaHei,Simsun,苹方-简,宋体-简,Noto Sans CJK SC,Source Han Sans SC" />

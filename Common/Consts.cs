@@ -21,5 +21,5 @@ internal static class Consts
         }
     }
 
-    public const string TemplateDownloadUrl = "http://temp.mmmlabs.com/Templates.zip";
+    public const string TemplateDownloadUrl = "https://github.com/vrchat/packages/releases/download/3.1.5/Templates-3.1.5.zip";
 }

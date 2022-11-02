@@ -20,13 +20,13 @@ internal partial class NewProjectViewModel : ViewModel
     private readonly TemplateRepository _templateRepository = Ioc.Default.GetRequiredService<TemplateRepository>();
     private readonly ProjectRepository _projectRepository = Ioc.Default.GetRequiredService<ProjectRepository>();
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(CanCreate))]
+    [NotifyPropertyChangedFor(nameof(CanCreate))]
     private string _projectDirectory = string.Empty;
     [ObservableProperty]
-    [AlsoNotifyChangeFor(nameof(CanCreate))]
+    [NotifyPropertyChangedFor(nameof(CanCreate))]
     private string _projectName = string.Empty;
     [ObservableProperty] 
-    [AlsoNotifyChangeFor(nameof(CanCreate))]
+    [NotifyPropertyChangedFor(nameof(CanCreate))]
     private UiUnityEditorModel? _selectedUnityEditor = null;
     [ObservableProperty]
     private bool _loading = false;
@@ -51,7 +51,7 @@ internal partial class NewProjectViewModel : ViewModel
         _projectRepository.Create(ProjectDirectory, ProjectName, SelectedTemplate, SelectedUnityEditor);
     }
     
-    [ICommand]
+    [RelayCommand]
     private async Task ScanTemplateDirectory() 
     {
         Loading = true;
@@ -59,7 +59,7 @@ internal partial class NewProjectViewModel : ViewModel
         Loading = false;
     }
 
-    [ICommand]
+    [RelayCommand]
     private async Task DownloadTemplate() 
     {
         Loading = true;
@@ -76,7 +76,6 @@ internal partial class NewProjectViewModel : ViewModel
     {
         _repository.ProjectDirectory.FirstOrDefaultAsync().SubscribeIn(this, x => ProjectDirectory = x ?? string.Empty);
         _repository.SelectedUnity.FirstOrDefaultAsync().SubscribeIn(this, x => SelectedUnityEditor = x);
-
     }
 
 }

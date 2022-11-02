@@ -90,10 +90,10 @@ internal class PackageRepository
 
     private void InitData()
     {
-        if (_realm.All<DbRemoteService>().Any())
-        {
-            return;
-        }
+        // if (_realm.All<DbRemoteService>().Any())
+        // {
+        //     return;
+        // }
 
         var loader = AvaloniaLocator.Current.GetService<IAssetLoader>();
         if (loader == null)

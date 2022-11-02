@@ -1,9 +1,12 @@
 using System.Diagnostics;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
+using CommunityToolkit.Mvvm.Input;
 using VRChatCreatorTools.Lifecycle.Controls;
 using VRChatCreatorTools.UI.Model;
 using VRChatCreatorTools.UI.Pages.NewProject;
@@ -23,6 +26,7 @@ internal partial class ProjectsPage : Page<ProjectsViewModel>
         Navigate<NewProjectPage>();
     }
 
+    [RelayCommand]
     private void OnProjectClicked(UiProjectModel item)
     {
         if (!item.Exists)
@@ -35,11 +39,18 @@ internal partial class ProjectsPage : Page<ProjectsViewModel>
     private async void OpenFolder_OnClicked(object? sender, RoutedEventArgs e)
     {
         e.Handled = true;
-        var picker = new OpenFolderDialog();
-        var result = await picker.ShowAsync(Window);
-        if (!string.IsNullOrEmpty(result))
+        if (Window == null)
         {
-            ViewModel?.AddProject(result);
+            return;
+        }
+
+        var result = await Window.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        {
+            AllowMultiple = false
+        });
+        if (result.Any())
+        {
+            await ViewModel.AddProject(result);
         }
     }
 }

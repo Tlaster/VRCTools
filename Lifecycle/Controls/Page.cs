@@ -19,13 +19,16 @@ public class Page : UserControl
 {
     protected Frame? Frame { get; private set; }
 
-    protected Window Window => this.FindAncestorOfType<Window>();
+    protected Window? Window => this.FindAncestorOfType<Window>();
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
         Frame = this.FindAncestorOfType<Frame>();
-        Frame.Navigated += OnNavigated;
+        if (Frame != null)
+        {
+            Frame.Navigated += OnNavigated;            
+        }
     }
 
     private void OnNavigated(object sender, NavigationEventArgs e)
@@ -70,7 +73,7 @@ public class Page : UserControl
 
     protected void GoBack()
     {
-        this.FindAncestorOfType<Frame>().GoBack(new SlideNavigationTransitionInfo
+        this.FindAncestorOfType<Frame>()?.GoBack(new SlideNavigationTransitionInfo
             { Effect = SlideNavigationTransitionEffect.FromLeft });
     }
 

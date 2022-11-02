@@ -24,7 +24,7 @@ internal partial class RemoteServiceEditViewModel : ViewModel
         _item = item;
     }
     
-    [ICommand]
+    [RelayCommand]
     private void Save()
     {
         if (_item == null)

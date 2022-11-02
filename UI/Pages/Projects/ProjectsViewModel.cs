@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
@@ -29,8 +30,13 @@ internal partial class ProjectsViewModel : ViewModel
     }
 
     public IObservable<IReadOnlyCollection<UiProjectModel>> Projects { get; }
+    
+    [RelayCommand]
+    private void SelectProject(UiProjectModel project)
+    {
+    }
 
-    [ICommand]
+    [RelayCommand]
     private void OpenFolder(UiProjectModel item)
     {
         if (!item.Exists)
@@ -41,7 +47,7 @@ internal partial class ProjectsViewModel : ViewModel
         Process.Start(new ProcessStartInfo { UseShellExecute = true, FileName = item.Path })?.Dispose();
     }
 
-    [ICommand]
+    [RelayCommand]
     private void OpenUnity(UiProjectModel item)
     {
         if (!item.Exists)
@@ -54,7 +60,7 @@ internal partial class ProjectsViewModel : ViewModel
             ?.Dispose();
     }
 
-    [ICommand]
+    [RelayCommand]
     private void DeleteProject(UiProjectModel project)
     {
         _projectRepository.Delete(project);
@@ -74,14 +80,21 @@ internal partial class ProjectsViewModel : ViewModel
             });
     }
 
-    public async Task AddProject(string path)
+    public async Task AddProject(IReadOnlyList<IStorageFolder> items)
     {
-        var parent = Directory.GetParent(path)?.FullName;
-        var projectName = new DirectoryInfo(path).Name;
-        var selectedUnity = await _settingRepository.SelectedUnity.FirstOrDefaultAsync();
-        if (parent != null && !string.IsNullOrEmpty(selectedUnity?.Path))
+        foreach (var item in items)
         {
-            _projectRepository.Add(parent, projectName, selectedUnity.Path);
+            if (item.TryGetUri(out var uri))
+            {
+                var path = uri.AbsolutePath;
+                var parent = Directory.GetParent(path)?.FullName;
+                var projectName = new DirectoryInfo(path).Name;
+                var selectedUnity = await _settingRepository.SelectedUnity.FirstOrDefaultAsync();
+                if (parent != null && !string.IsNullOrEmpty(selectedUnity?.Path))
+                {
+                    _projectRepository.Add(parent, projectName, selectedUnity.Path);
+                }
+            }
         }
     }
 }

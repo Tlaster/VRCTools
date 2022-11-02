@@ -59,18 +59,19 @@
             </ListBox>
             <controls1:CommandBarSeparator Grid.Column="1" Margin="8, 0, 0, 0" HorizontalAlignment="Left" />
             <GridSplitter Grid.Column="1" Background="Transparent" />
-            <avaloniaSpacedGrid:SpacedGrid
+            <Grid
                 HorizontalAlignment="Stretch"
                 Grid.Column="2"
                 ColumnDefinitions="Auto, *"
-                RowDefinitions="Auto, Auto, Auto, Auto, Auto, *"
-                ColumnSpacing="8"
-                RowSpacing="8">
-                <avaloniaSpacedGrid:SpacedGrid.Styles>
+                RowDefinitions="Auto, Auto, Auto, Auto, Auto, *">
+                <Grid.Styles>
                     <Style Selector="TextBlock">
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Style>
-                </avaloniaSpacedGrid:SpacedGrid.Styles>
+                    <Style Selector="Grid > :is(Control)">
+                        <Setter Property="Margin" Value="4"/>
+                    </Style>
+                </Grid.Styles>
                 <TextBlock Text="Template Name" />
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{CompiledBinding SelectedTemplate.Manifest.DisplayName, FallbackValue=''}" />
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Template ID" />
@@ -88,7 +89,7 @@
                     </TextBox.InnerRightContent>
                 </TextBox>
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="Unity Editor" />
-                <TextBlock Grid.Row="4" Grid.Column="1" IsVisible="{CompiledBinding !UnityEditorList^.Count}">No Unity Editor found!</TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="1" IsVisible="{CompiledBinding !UnityEditorList^.Count}" Text="No Unity Editor found!"/>
                 <ComboBox Grid.Row="4" Grid.Column="1"
                           HorizontalAlignment="Stretch"
                           IsVisible="{CompiledBinding !!UnityEditorList^.Count}"
@@ -100,7 +101,7 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-            </avaloniaSpacedGrid:SpacedGrid>
+            </Grid>
         </Grid>
     </Grid>
 </controls:Page>
